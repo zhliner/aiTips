@@ -1,6 +1,7 @@
-# AITools - 个人 AI 工具集
+# AITips - 个人 AI 小提示/片段集
 
-主要存放一些个人使用的 AI 编码工具（*.md），比如 commands、系统级 AGENTS.md 等。
+存放一些个人使用的 AI 编码用提示词（*.md），如 commands、系统级 AGENTS.md 等。
+以及其它一些零碎物件。
 
 
 ## 使用
@@ -28,6 +29,6 @@ ln -s ~/.config/opencode/aitools/commands myai  # 符号链接指向整个目录
 
 ## 提示
 
-- 本集合中定义的任何工具皆使用中文（zh-cn）。
-- 中文为表意文字，实际上天生适合与AI交互（语义空间）。
+- 本集合中定义的文档都使用中文（zh-cn）。
+- 表意的文字可能天生适合与AI交互吧？毕竟都是语义空间……
 
