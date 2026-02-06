@@ -4,6 +4,15 @@
 以及其它一些零碎物件。
 
 
+## 工作流（Human & AI）
+
+0. 项目构想。人类行为。
+1. 提案（Proposal）。明确边界，人类参与。
+2. 实现（Implementation Plan）。编码级设计。
+3. 任务清单。Agent 执行流程。
+4. 方案实施（Apply）…… Test…… Done!
+
+
 ## 使用
 
 ### opencode (https://opencode.ai/)
