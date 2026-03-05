@@ -7,7 +7,7 @@ model: github-copilot/claude-opus-4.6
 请阅读这个项目的设计构想（`conception/*`）升级版，深入理解。然后对之前创建的提案（proposal/*）逐文档核对修订：检查是否与新版的设计构想（Conception）相冲突或矛盾，或者现有的提案内容有无遗漏或多余？将情况告知用户，等待用户的回答或确认。
 
 > **注：**
-> 提案（Proposal）是创建项目实施方案（Implementation Plan）前的专业性详细描述。
+> 提案（Proposal）是创建项目实施方案（Implementation Plan）前对项目的专业性详细描述。
 
 提交给用户的情况反馈可以分批次，每次 1 ~ 3 个条目或问题。用户回答完后即可写入（修改后的）新版提案。
 
