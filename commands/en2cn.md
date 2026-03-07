@@ -1,7 +1,7 @@
 ---
 description: 将用户指定目录下的英文文档转换为简体中文（意译）。
 agent: build
-model: github-copilot/GPT-5.3-Codex
+model: github-copilot/gpt-5.3-codex
 ---
 
 在项目开发中，通常需要从用户的构想设计转换为 Agent 直接使用的技术提案。
