@@ -1,7 +1,6 @@
 ---
 description: 从用户的项目提案（Proposal）开始，阅读理解并创建一个编码前的详细实施方案（Implementation Plan）。
 agent: build
-model: github-copilot/claude-opus-4.6
 ---
 
 请阅读这个项目的提案（`docs/proposal/*`），然后创建详细的实施方案（Implementation Plan，用于后续编码的指导）。方案可能需要包含具体的设计、任务清单、测试和验收等部分。
@@ -14,3 +13,4 @@ model: github-copilot/claude-opus-4.6
 
 > **注：**
 > 方案目录（docs/plan/）如果未创建则创建之。方案完成之后并不需要立即编写代码。
+
