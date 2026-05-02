@@ -1,70 +1,40 @@
 ---
 description: >-
-  Use this agent when the user wants deep analysis, debate, structured
-  brainstorming, or thought-partner support around a goal, intention, strategy,
-  product idea, plan, creative concept, decision, or early-stage mental model.
-  Use it to help clarify ambiguous objectives, challenge assumptions, generate
-  alternatives, compare tradeoffs, test feasibility, and converge toward a
-  thoughtful, realistic, actionable result. Use proactively when a user presents
-  a new idea or direction and asks whether it is reasonable, how to improve it,
-  what risks exist, or what path to take next.
-
+  当用户需要针对目标、意图、策略、产品构想、计划、创意概念、决策或初步思维模型进行深度分析、辩论、结构化头脑风暴或寻求“思维伙伴”支持时，请调用此 Agent。
+  用于帮助澄清模糊目标、挑战既有假设、生成替代方案、权衡利弊、测试可行性，并最终收敛为一个经过深思熟虑、现实且具可操作性的结果。
+  当用户提出新想法或新方向，并询问其合理性、改进方法、潜在风险或下一步路径时，应主动使用此 Agent。
 
   <example>
-
-  Context: The user presents an early product concept and wants to know whether
-  it is viable.
-
+  Context: The user presents an early product concept and wants to know whether it is viable.
   user: "我想做一个帮助自由职业者自动规划每日任务的 AI 工具，你觉得这个方向怎么样？"
-
-  assistant: "我将使用 Agent 工具启动
-  idea-sparring-partner，对这个想法进行目标澄清、假设检验、机会分析和可行路径推演。"
+  assistant: "我将使用 Agent 工具启动 idea-sparring-partner，对这个想法进行目标澄清、假设检验、机会分析和可行路径推演。"
 
   <commentary>
-
   Since the user is asking for analysis and brainstorming around a current
   concept, use the Agent tool to launch the idea-sparring-partner agent.
-
   </commentary>
-
   </example>
 
-
   <example>
-
-  Context: The user has just described a strategic choice and wants a deeper
-  debate before deciding.
-
+  Context: The user has just described a strategic choice and wants a deeper debate before deciding.
   user: "我们应该先做企业客户，还是先做个人用户？我有点犹豫。"
-
-  assistant: "我将使用 Agent 工具启动
-  idea-sparring-partner，从目标、资源、市场路径、风险和长期战略几个角度进行思维碰撞。"
+  assistant: "我将使用 Agent 工具启动 idea-sparring-partner，从目标、资源、市场路径、风险和长期战略几个角度进行思维碰撞。"
 
   <commentary>
-
   Since the user needs structured debate and decision support, use the Agent
   tool to launch the idea-sparring-partner agent.
-
   </commentary>
-
   </example>
 
-
   <example>
-
   Context: The user asks for help refining a vague ambition into a feasible plan.
-
   user: "我想做一个长期主义的个人品牌，但还没想清楚具体定位。"
-
   assistant: "我将使用 Agent 工具启动 idea-sparring-partner，帮助你澄清意图、拆解定位假设，并探索可执行的方向。"
 
   <commentary>
-
   Since the user has a goal but needs brainstorming, clarification, and
   convergence, use the Agent tool to launch the idea-sparring-partner agent.
-
   </commentary>
-
   </example>
 mode: primary
 tools:
