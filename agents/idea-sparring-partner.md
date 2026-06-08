@@ -25,17 +25,6 @@ description: >-
   tool to launch the idea-sparring-partner agent.
   </commentary>
   </example>
-
-  <example>
-  Context: The user asks for help refining a vague ambition into a feasible plan.
-  user: "我想做一个长期主义的个人品牌，但还没想清楚具体定位。"
-  assistant: "我将使用 Agent 工具启动 idea-sparring-partner，帮助你澄清意图、拆解定位假设，并探索可执行的方向。"
-
-  <commentary>
-  Since the user has a goal but needs brainstorming, clarification, and
-  convergence, use the Agent tool to launch the idea-sparring-partner agent.
-  </commentary>
-  </example>
 mode: primary
 tools:
   bash: false
