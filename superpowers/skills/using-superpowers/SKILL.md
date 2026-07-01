@@ -1,62 +1,62 @@
 ---
 name: using-superpowers
-description: Use when starting any conversation - establishes how to find and use skills, requiring skill invocation before ANY response including clarifying questions
+description: 在开始任何对话时使用——建立如何查找和使用 skill 的规则，要求在做出任何响应（包括澄清性问题）之前必须调用 skill
 ---
 
 <SUBAGENT-STOP>
-If you were dispatched as a subagent to execute a specific task, ignore this skill.
+如果你被分派为 subagent 来执行特定任务，请忽略此 skill。
 </SUBAGENT-STOP>
 
 <EXTREMELY-IMPORTANT>
-If you think there is even a 1% chance a skill might apply to what you are doing, you ABSOLUTELY MUST invoke the skill.
+如果你认为某个 skill 有哪怕 1% 的可能性适用于你正在做的事情，你**绝对必须**调用该 skill。
 
-IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT.
+如果某个 skill 适用于你的任务，你别无选择。必须使用它。
 
-This is not negotiable. You cannot rationalize your way out of this.
+这不可协商。你不能找任何借口逃避。
 </EXTREMELY-IMPORTANT>
 
-## The Rule
+## 规则
 
-**Invoke relevant or requested skills BEFORE any response or action** — including clarifying questions, exploring the codebase, or checking files. If it turns out wrong for the situation, you don't have to use it.
+**在任何响应或行动之前调用相关或请求的 skill**——包括澄清问题、探索代码库或检查文件。如果结果对当前情况不合适，可以不使用它。
 
-**Before entering plan mode:** if you haven't already brainstormed, invoke the brainstorming skill first.
+**进入计划模式之前：** 如果你还没有进行头脑风暴，请先调用 brainstorming skill。
 
-Then announce "Using [skill] to [purpose]" and follow the skill exactly. If it has a checklist, create a todo per item.
+然后宣布"使用 [skill] 来 [目的]"，并严格遵循该 skill。如果它有检查清单，为每个条目创建一个 todo。
 
-## Skill Priority
+## Skill 优先级
 
-When multiple skills apply, process skills come first — they set the approach, then implementation skills (frontend-design, etc.) carry it out. Brainstorming and systematic-debugging are Superpowers' most common process skills, but the rule holds for any of them.
+当多个 skill 适用时，流程类 skill 优先——它们设定方法，然后实现类 skill（如 frontend-design 等）执行。brainstorming 和 systematic-debugging 是 Superpowers 最常用的流程类 skill，但此规则适用于所有 skill。
 
-- "Let's build X" → superpowers:brainstorming first, then implementation skills.
-- "Fix this bug" → superpowers:systematic-debugging first, then domain skills.
+- "我们来构建 X" → 首先 superpowers:brainstorming，然后是实现类 skill。
+- "修复这个 bug" → 首先 superpowers:systematic-debugging，然后是领域 skill。
 
-## Red Flags
+## 危险信号
 
-These thoughts mean STOP—you're rationalizing:
+以下想法意味着**停止**——你在找借口：
 
-| Thought | Reality |
+| 想法 | 现实 |
 |---------|---------|
-| "This is just a simple question" | Questions are tasks. Check for skills. |
-| "I need more context first" | Skill check comes BEFORE clarifying questions. |
-| "Let me explore the codebase first" | Skills tell you HOW to explore. Check first. |
-| "I can check git/files quickly" | Files lack conversation context. Check for skills. |
-| "Let me gather information first" | Skills tell you HOW to gather information. |
-| "This doesn't need a formal skill" | If a skill exists, use it. |
-| "I remember this skill" | Skills evolve. Read current version. |
-| "This doesn't count as a task" | Action = task. Check for skills. |
-| "The skill is overkill" | Simple things become complex. Use it. |
-| "I'll just do this one thing first" | Check BEFORE doing anything. |
-| "This feels productive" | Undisciplined action wastes time. Skills prevent this. |
-| "I know what that means" | Knowing the concept ≠ using the skill. Invoke it. |
+| "这只是个简单问题" | 问题就是任务。检查 skill。 |
+| "我需要更多上下文" | skill 检查在澄清问题**之前**。 |
+| "让我先探索代码库" | skill 告诉你**如何**探索。先检查。 |
+| "我可以快速检查 git/文件" | 文件缺少对话上下文。检查 skill。 |
+| "让我先收集信息" | skill 告诉你**如何**收集信息。 |
+| "这不需要正式的 skill" | 如果存在 skill，就使用它。 |
+| "我记得这个 skill" | skill 会演变。阅读当前版本。 |
+| "这不算是任务" | 行动 = 任务。检查 skill。 |
+| "用 skill 太过了" | 简单的事会变复杂。使用它。 |
+| "我先做这一件事" | 在做任何事**之前**先检查。 |
+| "这感觉很高效" | 无纪律的行动浪费时间。skill 防止这个。 |
+| "我知道那个是什么意思" | 知道概念 ≠ 使用 skill。调用它。 |
 
-## Platform Adaptation
+## 平台适配
 
-If your harness appears here, read its reference file for special instructions:
+如果你的 harness 出现在这里，阅读其参考文件以获取特殊说明：
 
 - Codex: `references/codex-tools.md`
 - Pi: `references/pi-tools.md`
 - Antigravity: `references/antigravity-tools.md`
 
-## User Instructions
+## 用户指令
 
-User instructions (CLAUDE.md, AGENTS.md, GEMINI.md, etc, direct requests) take precedence over skills, which in turn override default behavior. Only skip skill workflows or instructions when your human partner has explicitly told you to.
+用户指令（CLAUDE.md、AGENTS.md、GEMINI.md 等，以及直接请求）优先于 skill，而 skill 又覆盖默认行为。只有当你的伙伴明确告诉你时才跳过 skill 工作流或指令。
