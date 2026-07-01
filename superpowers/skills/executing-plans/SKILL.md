@@ -1,84 +1,84 @@
 ---
 name: executing-plans
-description: Use when you have a written implementation plan to execute in a separate session with review checkpoints
+description: 当你有书面实施计划需要在独立会话中执行，并设置审查检查点时使用
 ---
 
-# Executing Plans
+# 执行计划（Executing Plans）
 
-## Overview
+## 概述
 
-Load plan, review critically, execute tasks in batches, report for review between batches.
+加载计划，批判性审查，分批执行任务，在批次之间报告以供审查。
 
-**Core principle:** Batch execution with checkpoints for architect review.
+**核心原则：** 分批执行，设置检查点供架构师审查。
 
-**Announce at start:** "I'm using the executing-plans skill to implement this plan."
+**启动时宣布：** "I'm using the executing-plans skill to implement this plan."
 
-## The Process
+## 流程
 
-### Step 1: Load and Review Plan
-1. Read plan file
-2. Review critically - identify any questions or concerns about the plan
-3. If concerns: Raise them with your human partner before starting
-4. If no concerns: Create TodoWrite and proceed
+### 第 1 步：加载并审查计划
+1. 阅读计划文件
+2. 批判性审查——识别计划中的任何疑问或问题
+3. 如有疑虑：在开始前向人类伙伴提出
+4. 如无问题：创建 TodoWrite 并继续
 
-### Step 2: Execute Batch
-**Default: First 3 tasks**
+### 第 2 步：执行批次
+**默认：前 3 个任务**
 
-For each task:
-1. Mark as in_progress
-2. Follow each step exactly (plan has bite-sized steps)
-3. Run verifications as specified
-4. Mark as completed
+对每个任务：
+1. 标记为 in_progress
+2. 严格按照每个步骤执行（计划包含细化的步骤）
+3. 按规定运行验证
+4. 标记为已完成
 
-### Step 3: Report
-When batch complete:
-- Show what was implemented
-- Show verification output
-- Say: "Ready for feedback."
+### 第 3 步：报告
+批次完成后：
+- 展示已实现的内容
+- 展示验证输出
+- 说："Ready for feedback."
 
-### Step 4: Continue
-Based on feedback:
-- Apply changes if needed
-- Execute next batch
-- Repeat until complete
+### 第 4 步：继续
+根据反馈：
+- 如需调整则应用更改
+- 执行下一批次
+- 重复直到完成
 
-### Step 5: Complete Development
+### 第 5 步：完成开发
 
-After all tasks complete and verified:
-- Announce: "I'm using the finishing-a-development-branch skill to complete this work."
-- **REQUIRED SUB-SKILL:** Use superpowers:finishing-a-development-branch
-- Follow that skill to verify tests, present options, execute choice
+所有任务完成并验证后：
+- 宣布："I'm using the finishing-a-development-branch skill to complete this work."
+- **必需子技能：** 使用 superpowers:finishing-a-development-branch
+- 按照该技能的指引验证测试、展示选项、执行选择
 
-## When to Stop and Ask for Help
+## 何时停下来寻求帮助
 
-**STOP executing immediately when:**
-- Hit a blocker mid-batch (missing dependency, test fails, instruction unclear)
-- Plan has critical gaps preventing starting
-- You don't understand an instruction
-- Verification fails repeatedly
+**遇到以下情况时立即停止执行：**
+- 批次中遇到阻塞（缺少依赖、测试失败、指令不明确）
+- 计划存在关键缺失导致无法开始
+- 你不理解某条指令
+- 验证反复失败
 
-**Ask for clarification rather than guessing.**
+**宁可请求澄清也不要猜测。**
 
-## When to Revisit Earlier Steps
+## 何时重新审视早期步骤
 
-**Return to Review (Step 1) when:**
-- Partner updates the plan based on your feedback
-- Fundamental approach needs rethinking
+**返回审查（第 1 步）的情况：**
+- 人类伙伴根据你的反馈更新了计划
+- 基本方法需要重新思考
 
-**Don't force through blockers** - stop and ask.
+**不要强行突破阻塞**——停下来询问。
 
-## Remember
-- Review plan critically first
-- Follow plan steps exactly
-- Don't skip verifications
-- Reference skills when plan says to
-- Between batches: just report and wait
-- Stop when blocked, don't guess
-- Never start implementation on main/master branch without explicit user consent
+## 记住
+- 先批判性审查计划
+- 严格按照计划步骤执行
+- 不要跳过验证
+- 计划要求时引用相关技能
+- 批次之间：只报告并等待
+- 遇到阻塞时停止，不要猜测
+- 未经用户明确同意，不要在 main/master 分支上开始实现
 
-## Integration
+## 集成
 
-**Required workflow skills:**
-- **superpowers:using-git-worktrees** - REQUIRED: Set up isolated workspace before starting
-- **superpowers:writing-plans** - Creates the plan this skill executes
-- **superpowers:finishing-a-development-branch** - Complete development after all tasks
+**必需的工作流技能：**
+- **superpowers:using-git-worktrees** - 必需：在开始前设置隔离工作区
+- **superpowers:writing-plans** - 创建本技能执行的计划
+- **superpowers:finishing-a-development-branch** - 所有任务完成后收尾开发工作

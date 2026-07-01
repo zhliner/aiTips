@@ -1,8 +1,8 @@
-# Spec Compliance Reviewer Prompt Template
+# Spec Compliance Reviewer Prompt Template（规格合规审查员提示词模板）
 
-Use this template when dispatching a spec compliance reviewer subagent.
+在派遣规格合规审查子代理时使用此模板。
 
-**Purpose:** Verify implementer built what was requested (nothing more, nothing less)
+**目的：** 验证实现者是否构建了所要求的内容（不多不少）
 
 ```
 Task tool (general-purpose):

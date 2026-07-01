@@ -1,80 +1,80 @@
-# Skills Improvements from User Feedback
+# Skills Improvements from User Feedback（基于用户反馈的技能改进）
 
-**Date:** 2025-11-28
-**Status:** Draft
-**Source:** Two Claude instances using superpowers in real development scenarios
-
----
-
-## Executive Summary
-
-Two Claude instances provided detailed feedback from actual development sessions. Their feedback reveals **systematic gaps** in current skills that allowed preventable bugs to ship despite following the skills.
-
-**Critical insight:** These are problem reports, not just solution proposals. The problems are real; the solutions need careful evaluation.
-
-**Key themes:**
-1. **Verification gaps** - We verify operations succeed but not that they achieve intended outcomes
-2. **Process hygiene** - Background processes accumulate and interfere across subagents
-3. **Context optimization** - Subagents get too much irrelevant information
-4. **Self-reflection missing** - No prompt to critique own work before handoff
-5. **Mock safety** - Mocks can drift from interfaces without detection
-6. **Skill activation** - Skills exist but aren't being read/used
+**日期：** 2025-11-28
+**状态：** 草案
+**来源：** 两个 Claude 实例在真实开发场景中使用 superpowers 的经验
 
 ---
 
-## Problems Identified
+## Executive Summary（执行摘要）
 
-### Problem 1: Configuration Change Verification Gap
+两个 Claude 实例提供了来自实际开发会话的详细反馈。他们的反馈揭示了当前技能中的**系统性缺陷**，这些缺陷导致即使遵循了技能，本可避免的 bug 仍然被发布。
 
-**What happened:**
-- Subagent tested "OpenAI integration"
-- Set `OPENAI_API_KEY` env var
-- Got status 200 responses
-- Reported "OpenAI integration working"
-- **BUT** response contained `"model": "claude-sonnet-4-20250514"` - was actually using Anthropic
+**关键洞察：** 这些是问题报告，而不仅仅是解决方案提案。问题是真实的；解决方案需要仔细评估。
 
-**Root cause:**
-`verification-before-completion` checks operations succeed but not that outcomes reflect intended configuration changes.
-
-**Impact:** High - False confidence in integration tests, bugs ship to production
-
-**Example failure pattern:**
-- Switch LLM provider → verify status 200 but don't check model name
-- Enable feature flag → verify no errors but don't check feature is active
-- Change environment → verify deployment succeeds but don't check environment vars
+**主要主题：**
+1. **验证缺陷** - 我们验证操作是否成功，但不验证是否达到了预期结果
+2. **进程卫生** - 后台进程累积并在子代理之间产生干扰
+3. **上下文优化** - 子代理收到太多无关信息
+4. **缺少自我反思** - 没有在交接前批评自己工作的提示
+5. **Mock 安全** - Mock 可能在未被检测的情况下偏离接口
+6. **技能激活** - 技能存在但未被阅读/使用
 
 ---
 
-### Problem 2: Background Process Accumulation
+## Problems Identified（已识别的问题）
 
-**What happened:**
-- Multiple subagents dispatched during session
-- Each started background server processes
-- Processes accumulated (4+ servers running)
-- Stale processes still bound to ports
-- Later E2E test hit stale server with wrong config
-- Confusing/incorrect test results
+### Problem 1: Configuration Change Verification Gap（问题 1：配置变更验证缺陷）
 
-**Root cause:**
-Subagents are stateless - don't know about previous subagents' processes. No cleanup protocol.
+**发生了什么：**
+- 子代理测试了 "OpenAI integration"
+- 设置了 `OPENAI_API_KEY` 环境变量
+- 获得了状态 200 响应
+- 报告 "OpenAI integration working"
+- **但是**响应包含 `"model": "claude-sonnet-4-20250514"` - 实际使用的是 Anthropic
 
-**Impact:** Medium-High - Tests hit wrong server, false passes/failures, debugging confusion
+**根因：**
+`verification-before-completion` 检查操作是否成功，但不检查结果是否反映了预期的配置变更。
+
+**影响：** 高 - 集成测试中的虚假信心，bug 被发布到生产环境
+
+**示例失败模式：**
+- 切换 LLM 提供商 → 验证状态 200 但不检查模型名称
+- 启用功能标志 → 验证没有错误但不检查功能是否激活
+- 更改环境 → 验证部署成功但不检查环境变量
 
 ---
 
-### Problem 3: Context Bloat in Subagent Prompts
+### Problem 2: Background Process Accumulation（问题 2：后台进程累积）
 
-**What happened:**
-- Standard approach: give subagent full plan file to read
-- Experiment: give only task + pattern + file + verify command
-- Result: Faster, more focused, single-attempt completion more common
+**发生了什么：**
+- 会话期间分派了多个子代理
+- 每个都启动了后台服务器进程
+- 进程累积（4+ 个服务器在运行）
+- 过期进程仍绑定到端口
+- 后续 E2E 测试命中了配置错误的过期服务器
+- 混乱/不正确的测试结果
 
-**Root cause:**
-Subagents waste tokens and attention on irrelevant plan sections.
+**根因：**
+子代理是无状态的——不知道之前子代理的进程。没有清理协议。
 
-**Impact:** Medium - Slower execution, more failed attempts
+**影响：** 中高 - 测试命中错误的服务器，虚假通过/失败，调试混乱
 
-**What worked:**
+---
+
+### Problem 3: Context Bloat in Subagent Prompts（问题 3：子代理提示中的上下文膨胀）
+
+**发生了什么：**
+- 标准做法：给子代理完整的计划文件去读
+- 实验：只给任务 + 模式 + 文件 + 验证命令
+- 结果：更快、更专注、单次完成更常见
+
+**根因：**
+子代理在无关的计划部分浪费了 token 和注意力。
+
+**影响：** 中 - 执行更慢，更多失败的尝试
+
+**有效的做法：**
 ```
 You are adding a single E2E test to packnplay's test suite.
 
@@ -90,102 +90,102 @@ in its metadata should result in the container running with `--privileged` flag.
 
 ---
 
-### Problem 4: No Self-Reflection Before Handoff
+### Problem 4: No Self-Reflection Before Handoff（问题 4：交接前缺少自我反思）
 
-**What happened:**
-- Added self-reflection prompt: "Look at your work with fresh eyes - what could be better?"
-- Implementer for Task 5 identified failing test was due to implementation bug, not test bug
-- Traced to line 99: `strings.Join(metadata.Entrypoint, " ")` creating invalid Docker syntax
-- Without self-reflection, would have just reported "test fails" without root cause
+**发生了什么：**
+- 添加了自我反思提示："以全新的眼光审视你的工作——什么可以做得更好？"
+- Task 5 的实现者发现失败的测试是由于实现 bug，而非测试 bug
+- 追踪到第 99 行：`strings.Join(metadata.Entrypoint, " ")` 创建了无效的 Docker 语法
+- 没有自我反思的话，只会报告 "test fails" 而没有根因
 
-**Root cause:**
-Implementers don't naturally step back and critique their own work before reporting completion.
+**根因：**
+实现者不会自然地退后一步在报告完成前批评自己的工作。
 
-**Impact:** Medium - Bugs handed off to reviewer that implementer could have caught
+**影响：** 中 - bug 被传递给审查者，而实现者本可以发现
 
 ---
 
-### Problem 5: Mock-Interface Drift
+### Problem 5: Mock-Interface Drift（问题 5：Mock-接口漂移）
 
-**What happened:**
+**发生了什么：**
 ```typescript
-// Interface defines close()
+// 接口定义了 close()
 interface PlatformAdapter {
   close(): Promise<void>;
 }
 
-// Code (BUGGY) calls cleanup()
+// 代码（有 BUG）调用了 cleanup()
 await adapter.cleanup();
 
-// Mock (MATCHES BUG) defines cleanup()
+// Mock（匹配 BUG）定义了 cleanup()
 vi.mock('web-adapter', () => ({
   WebAdapter: vi.fn().mockImplementation(() => ({
-    cleanup: vi.fn().mockResolvedValue(undefined),  // Wrong!
+    cleanup: vi.fn().mockResolvedValue(undefined),  // 错误！
   })),
 }));
 ```
-- Tests passed
-- Runtime crashed: "adapter.cleanup is not a function"
+- 测试通过
+- 运行时崩溃："adapter.cleanup is not a function"
 
-**Root cause:**
-Mock derived from what buggy code calls, not from interface definition. TypeScript can't catch inline mocks with wrong method names.
+**根因：**
+Mock 是根据有 bug 的代码调用推导的，而不是根据接口定义。TypeScript 无法捕获带有错误方法名的内联 mock。
 
-**Impact:** High - Tests give false confidence, runtime crashes
+**影响：** 高 - 测试给出虚假信心，运行时崩溃
 
-**Why testing-anti-patterns didn't prevent this:**
-The skill covers testing mock behavior and mocking without understanding, but not the specific pattern of "derive mock from interface, not implementation."
-
----
-
-### Problem 6: Code Reviewer File Access
-
-**What happened:**
-- Code reviewer subagent dispatched
-- Couldn't find test file: "The file doesn't appear to exist in the repository"
-- File actually exists
-- Reviewer didn't know to explicitly read it first
-
-**Root cause:**
-Reviewer prompts don't include explicit file reading instructions.
-
-**Impact:** Low-Medium - Reviews fail or incomplete
+**为什么 testing-anti-patterns 没有防止这种情况：**
+该技能涵盖了测试 mock 行为和不理解就 mock 的问题，但没有涵盖"从接口而非实现推导 mock"这一特定模式。
 
 ---
 
-### Problem 7: Fix Workflow Latency
+### Problem 6: Code Reviewer File Access（问题 6：代码审查者文件访问）
 
-**What happened:**
-- Implementer identifies bug during self-reflection
-- Implementer knows the fix
-- Current workflow: report → I dispatch fixer → fixer fixes → I verify
-- Extra round-trip adds latency without adding value
+**发生了什么：**
+- 代码审查子代理被分派
+- 找不到测试文件："The file doesn't appear to exist in the repository"
+- 文件实际存在
+- 审查者不知道需要先显式读取文件
 
-**Root cause:**
-Rigid separation between implementer and fixer roles when implementer has already diagnosed.
+**根因：**
+审查者提示中没有包含显式的文件读取指令。
 
-**Impact:** Low - Latency, but no correctness issue
-
----
-
-### Problem 8: Skills Not Being Read
-
-**What happened:**
-- `testing-anti-patterns` skill exists
-- Neither human nor subagents read it before writing tests
-- Would have prevented some issues (though not all - see Problem 5)
-
-**Root cause:**
-No enforcement that subagents read relevant skills. No prompt includes skill reading.
-
-**Impact:** Medium - Skill investment wasted if not used
+**影响：** 低中 - 审查失败或不完整
 
 ---
 
-## Proposed Improvements
+### Problem 7: Fix Workflow Latency（问题 7：修复工作流延迟）
 
-### 1. verification-before-completion: Add Configuration Change Verification
+**发生了什么：**
+- 实现者在自我反思中发现 bug
+- 实现者知道修复方法
+- 当前工作流：报告 → 我分派修复者 → 修复者修复 → 我验证
+- 额外的往返增加了延迟而没有增加价值
 
-**Add new section:**
+**根因：**
+当实现者已经诊断出问题时，实现者和修复者角色之间的僵硬分离。
+
+**影响：** 低 - 延迟，但没有正确性问题
+
+---
+
+### Problem 8: Skills Not Being Read（问题 8：技能未被阅读）
+
+**发生了什么：**
+- `testing-anti-patterns` 技能存在
+- 人和子代理在编写测试前都没有阅读它
+- 本可以防止一些问题（虽然不是全部——见问题 5）
+
+**根因：**
+没有强制子代理阅读相关技能。没有提示包含技能阅读。
+
+**影响：** 中 - 如果不使用，技能投入就浪费了
+
+---
+
+## Proposed Improvements（改进建议）
+
+### 1. verification-before-completion: Add Configuration Change Verification（添加配置变更验证）
+
+**添加新章节：**
 
 ```markdown
 ## Verifying Configuration Changes
@@ -229,12 +229,13 @@ Red flags:
 
 **Why this works:**
 Forces verification of INTENT, not just operation success.
+```
 
 ---
 
-### 2. subagent-driven-development: Add Process Hygiene for E2E Tests
+### 2. subagent-driven-development: Add Process Hygiene for E2E Tests（为 E2E 测试添加进程卫生）
 
-**Add new section:**
+**添加新章节：**
 
 ```markdown
 ## Process Hygiene for E2E Tests
@@ -283,23 +284,23 @@ After tests:
 - Confusing test results (hitting wrong server)
 ```
 
-**Trade-off analysis:**
-- Adds boilerplate to prompts
-- But prevents very confusing debugging
-- Worth it for E2E test subagents
+**权衡分析：**
+- 增加了提示的样板代码
+- 但防止了非常令人困惑的调试
+- 对 E2E 测试子代理来说值得
 
 ---
 
-### 3. subagent-driven-development: Add Lean Context Option
+### 3. subagent-driven-development: Add Lean Context Option（添加精简上下文选项）
 
-**Modify Step 2: Execute Task with Subagent**
+**修改步骤 2：使用子代理执行任务**
 
-**Before:**
+**修改前：**
 ```
 Read that task carefully from [plan-file].
 ```
 
-**After:**
+**修改后：**
 ```
 ## Context Approaches
 
@@ -333,7 +334,7 @@ Verification: [exact command to run]
 - Complex logic that needs context
 ```
 
-**Example:**
+**示例：**
 ```
 Lean context prompt:
 
@@ -347,16 +348,16 @@ Verify: go test -v ./pkg/runner -run TestE2E_FeaturePrivilegedMode -timeout 5m
 Report: Implementation, test results, any issues."
 ```
 
-**Why this works:**
-Reduces token usage, increases focus, faster completion when appropriate.
+**为什么有效：**
+减少 token 使用，增加专注度，在适当时更快完成。
 
 ---
 
-### 4. subagent-driven-development: Add Self-Reflection Step
+### 4. subagent-driven-development: Add Self-Reflection Step（添加自我反思步骤）
 
-**Modify Step 2: Execute Task with Subagent**
+**修改步骤 2：使用子代理执行任务**
 
-**Add to prompt template:**
+**添加到提示模板：**
 
 ```
 When done, BEFORE reporting back:
@@ -379,19 +380,19 @@ Then report:
 - Files changed
 ```
 
-**Why this works:**
-Catches bugs implementer can find themselves before handoff. Documented case: identified entrypoint bug through self-reflection.
+**为什么有效：**
+在交接前捕获实现者自己能发现的 bug。有文档记录的案例：通过自我反思发现了 entrypoint bug。
 
-**Trade-off:**
-Adds ~30 seconds per task, but catches issues before review.
+**权衡：**
+每个任务增加约 30 秒，但在审查前捕获问题。
 
 ---
 
-### 5. requesting-code-review: Add Explicit File Reading
+### 5. requesting-code-review: Add Explicit File Reading（添加显式文件读取）
 
-**Modify the code-reviewer template:**
+**修改代码审查者模板：**
 
-**Add at the beginning:**
+**在开头添加：**
 
 ```markdown
 ## Files to Review
@@ -411,14 +412,14 @@ If you cannot find a file:
 DO NOT proceed with review until you've read the actual code.
 ```
 
-**Why this works:**
-Explicit instruction prevents "file not found" issues.
+**为什么有效：**
+显式指令防止 "file not found" 问题。
 
 ---
 
-### 6. testing-anti-patterns: Add Mock-Interface Drift Anti-Pattern
+### 6. testing-anti-patterns: Add Mock-Interface Drift Anti-Pattern（添加 Mock-接口漂移反模式）
 
-**Add new Anti-Pattern 6:**
+**添加新的反模式 6：**
 
 ```markdown
 ## Anti-Pattern 6: Mocks Derived from Implementation
@@ -494,14 +495,14 @@ When you see runtime error "X is not a function" and tests pass:
 3. Look for method name mismatches
 ```
 
-**Why this works:**
-Directly addresses the failure pattern from feedback.
+**为什么有效：**
+直接解决了反馈中的失败模式。
 
 ---
 
-### 7. subagent-driven-development: Require Skills Reading for Test Subagents
+### 7. subagent-driven-development: Require Skills Reading for Test Subagents（要求测试子代理阅读技能）
 
-**Add to prompt template when task involves testing:**
+**当任务涉及测试时，添加到提示模板：**
 
 ```markdown
 BEFORE writing any tests:
@@ -517,24 +518,24 @@ BEFORE writing any tests:
 This is NOT optional. Tests that violate anti-patterns will be rejected in review.
 ```
 
-**Why this works:**
-Ensures skills are actually used, not just exist.
+**为什么有效：**
+确保技能被实际使用，而不仅仅存在。
 
-**Trade-off:**
-Adds time to each task, but prevents entire classes of bugs.
+**权衡：**
+增加每个任务的时间，但防止整类 bug。
 
 ---
 
-### 8. subagent-driven-development: Allow Implementer to Fix Self-Identified Issues
+### 8. subagent-driven-development: Allow Implementer to Fix Self-Identified Issues（允许实现者修复自我发现的问题）
 
-**Modify Step 2:**
+**修改步骤 2：**
 
-**Current:**
+**当前：**
 ```
 Subagent reports back with summary of work.
 ```
 
-**Proposed:**
+**建议：**
 ```
 Subagent performs self-reflection, then:
 
@@ -552,160 +553,160 @@ Include in report:
 - Final verification results
 ```
 
-**Why this works:**
-Reduces latency when implementer already knows the fix. Documented case: would have saved one round-trip for entrypoint bug.
+**为什么有效：**
+当实现者已经知道修复方法时减少延迟。有文档记录的案例：可以为 entrypoint bug 节省一次往返。
 
-**Trade-off:**
-Slightly more complex prompt, but faster end-to-end.
-
----
-
-## Implementation Plan
-
-### Phase 1: High-Impact, Low-Risk (Do First)
-
-1. **verification-before-completion: Configuration change verification**
-   - Clear addition, doesn't change existing content
-   - Addresses high-impact problem (false confidence in tests)
-   - File: `skills/verification-before-completion/SKILL.md`
-
-2. **testing-anti-patterns: Mock-interface drift**
-   - Adds new anti-pattern, doesn't modify existing
-   - Addresses high-impact problem (runtime crashes)
-   - File: `skills/testing-anti-patterns/SKILL.md`
-
-3. **requesting-code-review: Explicit file reading**
-   - Simple addition to template
-   - Fixes concrete problem (reviewers can't find files)
-   - File: `skills/requesting-code-review/SKILL.md`
-
-### Phase 2: Moderate Changes (Test Carefully)
-
-4. **subagent-driven-development: Process hygiene**
-   - Adds new section, doesn't change workflow
-   - Addresses medium-high impact (test reliability)
-   - File: `skills/subagent-driven-development/SKILL.md`
-
-5. **subagent-driven-development: Self-reflection**
-   - Changes prompt template (higher risk)
-   - But documented to catch bugs
-   - File: `skills/subagent-driven-development/SKILL.md`
-
-6. **subagent-driven-development: Skills reading requirement**
-   - Adds prompt overhead
-   - But ensures skills are actually used
-   - File: `skills/subagent-driven-development/SKILL.md`
-
-### Phase 3: Optimization (Validate First)
-
-7. **subagent-driven-development: Lean context option**
-   - Adds complexity (two approaches)
-   - Needs validation that it doesn't cause confusion
-   - File: `skills/subagent-driven-development/SKILL.md`
-
-8. **subagent-driven-development: Allow implementer to fix**
-   - Changes workflow (higher risk)
-   - Optimization, not bug fix
-   - File: `skills/subagent-driven-development/SKILL.md`
+**权衡：**
+提示稍微更复杂，但端到端更快。
 
 ---
 
-## Open Questions
+## Implementation Plan（实现计划）
 
-1. **Lean context approach:**
-   - Should we make it the default for pattern-based tasks?
-   - How do we decide which approach to use?
-   - Risk of being too lean and missing important context?
+### Phase 1: High-Impact, Low-Risk (Do First)（阶段 1：高影响、低风险——先做）
 
-2. **Self-reflection:**
-   - Will this slow down simple tasks significantly?
-   - Should it only apply to complex tasks?
-   - How do we prevent "reflection fatigue" where it becomes rote?
+1. **verification-before-completion：配置变更验证**
+   - 清晰的添加，不改变现有内容
+   - 解决高影响问题（测试中的虚假信心）
+   - 文件：`skills/verification-before-completion/SKILL.md`
 
-3. **Process hygiene:**
-   - Should this be in subagent-driven-development or a separate skill?
-   - Does it apply to other workflows beyond E2E tests?
-   - How do we handle cases where process SHOULD persist (dev servers)?
+2. **testing-anti-patterns：Mock-接口漂移**
+   - 添加新反模式，不修改现有内容
+   - 解决高影响问题（运行时崩溃）
+   - 文件：`skills/testing-anti-patterns/SKILL.md`
 
-4. **Skills reading enforcement:**
-   - Should we require ALL subagents to read relevant skills?
-   - How do we keep prompts from becoming too long?
-   - Risk of over-documenting and losing focus?
+3. **requesting-code-review：显式文件读取**
+   - 简单添加到模板
+   - 修复具体问题（审查者找不到文件）
+   - 文件：`skills/requesting-code-review/SKILL.md`
 
----
+### Phase 2: Moderate Changes (Test Carefully)（阶段 2：中等变更——仔细测试）
 
-## Success Metrics
+4. **subagent-driven-development：进程卫生**
+   - 添加新章节，不改变工作流
+   - 解决中高影响问题（测试可靠性）
+   - 文件：`skills/subagent-driven-development/SKILL.md`
 
-How do we know these improvements work?
+5. **subagent-driven-development：自我反思**
+   - 修改提示模板（风险较高）
+   - 但有文档证明能捕获 bug
+   - 文件：`skills/subagent-driven-development/SKILL.md`
 
-1. **Configuration verification:**
-   - Zero instances of "test passed but wrong config was used"
-   - Jesse doesn't say "that's not actually testing what you think"
+6. **subagent-driven-development：技能阅读要求**
+   - 增加提示开销
+   - 但确保技能被实际使用
+   - 文件：`skills/subagent-driven-development/SKILL.md`
 
-2. **Process hygiene:**
-   - Zero instances of "test hit wrong server"
-   - No port conflict errors during E2E test runs
+### Phase 3: Optimization (Validate First)（阶段 3：优化——先验证）
 
-3. **Mock-interface drift:**
-   - Zero instances of "tests pass but runtime crashes on missing method"
-   - No method name mismatches between mocks and interfaces
+7. **subagent-driven-development：精简上下文选项**
+   - 增加复杂性（两种方法）
+   - 需要验证不会导致混淆
+   - 文件：`skills/subagent-driven-development/SKILL.md`
 
-4. **Self-reflection:**
-   - Measurable: Do implementer reports include self-reflection findings?
-   - Qualitative: Do fewer bugs make it to code review?
-
-5. **Skills reading:**
-   - Subagent reports reference skill gate functions
-   - Fewer anti-pattern violations in code review
-
----
-
-## Risks and Mitigations
-
-### Risk: Prompt Bloat
-**Problem:** Adding all these requirements makes prompts overwhelming
-**Mitigation:**
-- Phase implementation (don't add everything at once)
-- Make some additions conditional (E2E hygiene only for E2E tests)
-- Consider templates for different task types
-
-### Risk: Analysis Paralysis
-**Problem:** Too much reflection/verification slows execution
-**Mitigation:**
-- Keep gate functions quick (seconds, not minutes)
-- Make lean context opt-in initially
-- Monitor task completion times
-
-### Risk: False Sense of Security
-**Problem:** Following checklist doesn't guarantee correctness
-**Mitigation:**
-- Emphasize gate functions are minimums, not maximums
-- Keep "use judgment" language in skills
-- Document that skills catch common failures, not all failures
-
-### Risk: Skill Divergence
-**Problem:** Different skills give conflicting advice
-**Mitigation:**
-- Review changes across all skills for consistency
-- Document how skills interact (Integration sections)
-- Test with real scenarios before deployment
+8. **subagent-driven-development：允许实现者修复**
+   - 改变工作流（风险较高）
+   - 优化，不是 bug 修复
+   - 文件：`skills/subagent-driven-development/SKILL.md`
 
 ---
 
-## Recommendation
+## Open Questions（待解决问题）
 
-**Proceed with Phase 1 immediately:**
-- verification-before-completion: Configuration change verification
-- testing-anti-patterns: Mock-interface drift
-- requesting-code-review: Explicit file reading
+1. **精简上下文方法：**
+   - 我们应该让它成为基于模式任务的默认选项吗？
+   - 我们如何决定使用哪种方法？
+   - 过于精简而遗漏重要上下文的风险？
 
-**Test Phase 2 with Jesse before finalizing:**
-- Get feedback on self-reflection impact
-- Validate process hygiene approach
-- Confirm skills reading requirement is worth overhead
+2. **自我反思：**
+   - 这会显著拖慢简单任务吗？
+   - 应该只应用于复杂任务吗？
+   - 如何防止"反思疲劳"——变成例行公事？
 
-**Hold Phase 3 pending validation:**
-- Lean context needs real-world testing
-- Implementer-fix workflow change needs careful evaluation
+3. **进程卫生：**
+   - 应该放在 subagent-driven-development 中还是单独的技能中？
+   - 是否适用于 E2E 测试之外的工作流？
+   - 如何处理进程*应该*持续存在的情况（开发服务器）？
 
-These changes address real problems documented by users while minimizing risk of making skills worse.
+4. **技能阅读强制执行：**
+   - 应该要求所有子代理阅读相关技能吗？
+   - 如何保持提示不会太长？
+   - 过度文档化而失去焦点的风险？
+
+---
+
+## Success Metrics（成功指标）
+
+我们如何知道这些改进有效？
+
+1. **配置验证：**
+   - 零次"测试通过但使用了错误配置"的情况
+   - Jesse 不再说"那实际上不是在测试你以为的东西"
+
+2. **进程卫生：**
+   - 零次"测试命中了错误的服务器"的情况
+   - E2E 测试运行中没有端口冲突错误
+
+3. **Mock-接口漂移：**
+   - 零次"测试通过但运行时因缺少方法而崩溃"的情况
+   - Mock 和接口之间没有方法名不匹配
+
+4. **自我反思：**
+   - 可衡量：实现者报告是否包含自我反思发现？
+   - 定性：更少的 bug 进入代码审查？
+
+5. **技能阅读：**
+   - 子代理报告引用了技能门控函数
+   - 代码审查中的反模式违规更少
+
+---
+
+## Risks and Mitigations（风险与缓解措施）
+
+### Risk: Prompt Bloat（风险：提示膨胀）
+**问题：** 添加所有这些要求使提示不堪重负
+**缓解：**
+- 分阶段实施（不要一次添加所有内容）
+- 使某些添加有条件（E2E 卫生仅用于 E2E 测试）
+- 考虑不同任务类型的模板
+
+### Risk: Analysis Paralysis（风险：分析瘫痪）
+**问题：** 过多的反思/验证拖慢执行
+**缓解：**
+- 保持门控函数快速（秒级，不是分钟级）
+- 初始阶段精简上下文为可选
+- 监控任务完成时间
+
+### Risk: False Sense of Security（风险：虚假安全感）
+**问题：** 遵循检查清单不能保证正确性
+**缓解：**
+- 强调门控函数是最小值，不是最大值
+- 在技能中保留"使用判断"的语言
+- 记录技能捕获常见失败，而非所有失败
+
+### Risk: Skill Divergence（风险：技能分歧）
+**问题：** 不同技能给出矛盾建议
+**缓解：**
+- 审查所有技能的一致性变更
+- 记录技能如何交互（Integration 章节）
+- 在部署前用真实场景测试
+
+---
+
+## Recommendation（建议）
+
+**立即推进阶段 1：**
+- verification-before-completion：配置变更验证
+- testing-anti-patterns：Mock-接口漂移
+- requesting-code-review：显式文件读取
+
+**在最终确定前与 Jesse 测试阶段 2：**
+- 获取关于自我反思影响的反馈
+- 验证进程卫生方法
+- 确认技能阅读要求值得开销
+
+**暂缓阶段 3 等待验证：**
+- 精简上下文需要真实世界测试
+- 实现者修复工作流变更需要仔细评估
+
+这些变更解决了用户记录的真实问题，同时最小化使技能变差的风险。

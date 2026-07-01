@@ -1,72 +1,72 @@
-# Superpowers for Codex
+# Superpowers for Codex（Codex 的 Superpowers）
 
-Guide for using Superpowers with OpenAI Codex via native skill discovery.
+通过原生技能发现将 Superpowers 与 OpenAI Codex 配合使用的指南。
 
-## Quick Install
+## Quick Install（快速安装）
 
-Tell Codex:
+告诉 Codex：
 
 ```
 Fetch and follow instructions from https://raw.githubusercontent.com/obra/superpowers/refs/heads/main/.codex/INSTALL.md
 ```
 
-## Manual Installation
+## Manual Installation（手动安装）
 
-### Prerequisites
+### Prerequisites（前提条件）
 
 - OpenAI Codex CLI
 - Git
 
-### Steps
+### Steps（步骤）
 
-1. Clone the repo:
+1. 克隆仓库：
    ```bash
    git clone https://github.com/obra/superpowers.git ~/.codex/superpowers
    ```
 
-2. Create the skills symlink:
+2. 创建技能符号链接：
    ```bash
    mkdir -p ~/.agents/skills
    ln -s ~/.codex/superpowers/skills ~/.agents/skills/superpowers
    ```
 
-3. Restart Codex.
+3. 重启 Codex。
 
 ### Windows
 
-Use a junction instead of a symlink (works without Developer Mode):
+使用连接点（junction）代替符号链接（无需开发者模式即可工作）：
 
 ```powershell
 New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.agents\skills"
 cmd /c mklink /J "$env:USERPROFILE\.agents\skills\superpowers" "$env:USERPROFILE\.codex\superpowers\skills"
 ```
 
-## How It Works
+## How It Works（工作原理）
 
-Codex has native skill discovery — it scans `~/.agents/skills/` at startup, parses SKILL.md frontmatter, and loads skills on demand. Superpowers skills are made visible through a single symlink:
+Codex 具有原生技能发现功能——它在启动时扫描 `~/.agents/skills/`，解析 SKILL.md frontmatter，并按需加载技能。Superpowers 技能通过一个符号链接使其可见：
 
 ```
 ~/.agents/skills/superpowers/ → ~/.codex/superpowers/skills/
 ```
 
-The `using-superpowers` skill is discovered automatically and enforces skill usage discipline — no additional configuration needed.
+`using-superpowers` 技能会被自动发现并强制执行技能使用纪律——无需额外配置。
 
-## Usage
+## Usage（使用）
 
-Skills are discovered automatically. Codex activates them when:
-- You mention a skill by name (e.g., "use brainstorming")
-- The task matches a skill's description
-- The `using-superpowers` skill directs Codex to use one
+技能会被自动发现。Codex 在以下情况激活它们：
+- 你按名称提到某个技能（例如，"use brainstorming"）
+- 任务匹配某个技能的描述
+- `using-superpowers` 技能指示 Codex 使用某个技能
 
-### Personal Skills
+### Personal Skills（个人技能）
 
-Create your own skills in `~/.agents/skills/`:
+在 `~/.agents/skills/` 中创建你自己的技能：
 
 ```bash
 mkdir -p ~/.agents/skills/my-skill
 ```
 
-Create `~/.agents/skills/my-skill/SKILL.md`:
+创建 `~/.agents/skills/my-skill/SKILL.md`：
 
 ```markdown
 ---
@@ -79,42 +79,42 @@ description: Use when [condition] - [what it does]
 [Your skill content here]
 ```
 
-The `description` field is how Codex decides when to activate a skill automatically — write it as a clear trigger condition.
+`description` 字段是 Codex 决定何时自动激活技能的依据——请将其写为清晰的触发条件。
 
-## Updating
+## Updating（更新）
 
 ```bash
 cd ~/.codex/superpowers && git pull
 ```
 
-Skills update instantly through the symlink.
+技能通过符号链接即时更新。
 
-## Uninstalling
+## Uninstalling（卸载）
 
 ```bash
 rm ~/.agents/skills/superpowers
 ```
 
-**Windows (PowerShell):**
+**Windows (PowerShell)：**
 ```powershell
 Remove-Item "$env:USERPROFILE\.agents\skills\superpowers"
 ```
 
-Optionally delete the clone: `rm -rf ~/.codex/superpowers` (Windows: `Remove-Item -Recurse -Force "$env:USERPROFILE\.codex\superpowers"`).
+可选地删除克隆：`rm -rf ~/.codex/superpowers`（Windows：`Remove-Item -Recurse -Force "$env:USERPROFILE\.codex\superpowers"`）。
 
-## Troubleshooting
+## Troubleshooting（故障排除）
 
-### Skills not showing up
+### Skills not showing up（技能未显示）
 
-1. Verify the symlink: `ls -la ~/.agents/skills/superpowers`
-2. Check skills exist: `ls ~/.codex/superpowers/skills`
-3. Restart Codex — skills are discovered at startup
+1. 验证符号链接：`ls -la ~/.agents/skills/superpowers`
+2. 检查技能是否存在：`ls ~/.codex/superpowers/skills`
+3. 重启 Codex——技能在启动时被发现
 
-### Windows junction issues
+### Windows junction issues（Windows 连接点问题）
 
-Junctions normally work without special permissions. If creation fails, try running PowerShell as administrator.
+连接点通常无需特殊权限即可工作。如果创建失败，请尝试以管理员身份运行 PowerShell。
 
-## Getting Help
+## Getting Help（获取帮助）
 
-- Report issues: https://github.com/obra/superpowers/issues
-- Main documentation: https://github.com/obra/superpowers
+- 报告问题：https://github.com/obra/superpowers/issues
+- 主文档：https://github.com/obra/superpowers

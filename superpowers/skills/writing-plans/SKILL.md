@@ -3,32 +3,32 @@ name: writing-plans
 description: Use when you have a spec or requirements for a multi-step task, before touching code
 ---
 
-# Writing Plans
+# Writing Plans（编写计划）
 
-## Overview
+## 概述
 
-Write comprehensive implementation plans assuming the engineer has zero context for our codebase and questionable taste. Document everything they need to know: which files to touch for each task, code, testing, docs they might need to check, how to test it. Give them the whole plan as bite-sized tasks. DRY. YAGNI. TDD. Frequent commits.
+编写全面的实现计划，假设工程师对我们的代码库零上下文且品味存疑。记录他们需要知道的一切：每个任务要涉及哪些文件、代码、测试、可能需要查阅的文档、如何测试。以小块任务的形式提供完整计划。DRY。YAGNI。TDD。频繁提交。
 
-Assume they are a skilled developer, but know almost nothing about our toolset or problem domain. Assume they don't know good test design very well.
+假设他们是熟练的开发者，但对我们的工具集或问题领域几乎一无所知。假设他们不太了解好的测试设计。
 
-**Announce at start:** "I'm using the writing-plans skill to create the implementation plan."
+**在开始时宣布：** "I'm using the writing-plans skill to create the implementation plan."
 
-**Context:** This should be run in a dedicated worktree (created by brainstorming skill).
+**上下文：** 这应该在专用的 worktree 中运行（由 brainstorming 技能创建）。
 
-**Save plans to:** `docs/plans/YYYY-MM-DD-<feature-name>.md`
+**计划保存至：** `docs/plans/YYYY-MM-DD-<feature-name>.md`
 
-## Bite-Sized Task Granularity
+## 小块任务粒度
 
-**Each step is one action (2-5 minutes):**
-- "Write the failing test" - step
-- "Run it to make sure it fails" - step
-- "Implement the minimal code to make the test pass" - step
-- "Run the tests and make sure they pass" - step
-- "Commit" - step
+**每个步骤是一个操作（2-5 分钟）：**
+- "Write the failing test" - 一步
+- "Run it to make sure it fails" - 一步
+- "Implement the minimal code to make the test pass" - 一步
+- "Run the tests and make sure they pass" - 一步
+- "Commit" - 一步
 
-## Plan Document Header
+## 计划文档头部
 
-**Every plan MUST start with this header:**
+**每个计划必须以此头部开始：**
 
 ```markdown
 # [Feature Name] Implementation Plan
@@ -44,7 +44,7 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 ---
 ```
 
-## Task Structure
+## 任务结构
 
 ````markdown
 ### Task N: [Component Name]
@@ -87,16 +87,16 @@ git commit -m "feat: add specific feature"
 ```
 ````
 
-## Remember
-- Exact file paths always
-- Complete code in plan (not "add validation")
-- Exact commands with expected output
-- Reference relevant skills with @ syntax
-- DRY, YAGNI, TDD, frequent commits
+## 记住
+- 始终使用精确的文件路径
+- 计划中包含完整代码（不是"add validation"）
+- 精确的命令和预期输出
+- 使用 @ 语法引用相关技能
+- DRY、YAGNI、TDD、频繁提交
 
-## Execution Handoff
+## 执行交接
 
-After saving the plan, offer execution choice:
+保存计划后，提供执行选择：
 
 **"Plan complete and saved to `docs/plans/<filename>.md`. Two execution options:**
 
@@ -106,11 +106,11 @@ After saving the plan, offer execution choice:
 
 **Which approach?"**
 
-**If Subagent-Driven chosen:**
-- **REQUIRED SUB-SKILL:** Use superpowers:subagent-driven-development
-- Stay in this session
-- Fresh subagent per task + code review
+**如果选择 Subagent-Driven：**
+- **必需子技能：** Use superpowers:subagent-driven-development
+- 留在当前会话
+- 每个任务一个全新子代理 + 代码评审
 
-**If Parallel Session chosen:**
-- Guide them to open new session in worktree
-- **REQUIRED SUB-SKILL:** New session uses superpowers:executing-plans
+**如果选择 Parallel Session：**
+- 引导他们在 worktree 中打开新会话
+- **必需子技能：** 新会话使用 superpowers:executing-plans
