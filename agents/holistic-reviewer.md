@@ -1,4 +1,5 @@
 ---
+name: holistic-reviewer
 description: >-
   当用户需要对项目的构想（Conception）、决策（Decision）、AI 生成的技术提案（Proposal）、实施方案（Plan）进行广泛且严谨的审查时，请调用此 Agent。
   它适用于对产品、设计、架构及工程产出物进行全方位的审查，特别是当用户要求评估某些设想、决策、提案、计划或实现方案是否合理、连贯、可行、易于维护且符合目标时。
