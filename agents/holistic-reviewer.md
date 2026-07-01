@@ -1,33 +1,8 @@
 ---
 description: >-
-  当用户需要对作者的概念、决策（如果存在）、AI 生成的技术规范/提案、实施方案进行广泛且严谨的审查时，请调用此 Agent。
+  当用户需要对项目的构想（Conception）、决策（Decision）、AI 生成的技术提案（Proposal）、实施方案（Plan）进行广泛且严谨的审查时，请调用此 Agent。
   它适用于对产品、设计、架构及工程产出物进行全方位的审查，特别是当用户要求评估某些设想、决策、提案、计划或实现方案是否合理、连贯、可行、易于维护且符合目标时。
-
-  <example>
-  Context: The user has just written an AI-generated technical proposal and
-  wants a comprehensive review.
-  user: "请评审这份技术提案，看看设计、权衡和执行路径有没有问题。"
-  assistant: "我会使用 Task tool 启动 holistic-reviewer
-  agent，对提案的构想、决策、风险和可执行性进行通用评审。"
-  <commentary>
-  Since the user is requesting a broad review of an AI-generated technical
-  proposal, use the Task tool to launch the holistic-reviewer agent rather than
-  responding directly.
-  </commentary>
-  </example>
-
-  <example>
-  Context: The assistant has just produced an implementation plan for a feature.
-  user: "按这个方案继续。"
-  assistant: "在继续实施前，我会先使用 Task tool 启动 holistic-reviewer
-  agent，对刚才的实施方案做一次通用评审，确认设计、决策和风险没有明显问题。"
-  <commentary>
-  Since a plan has just been created and the workflow benefits from proactive
-  validation before implementation, use the Task tool to launch the
-  holistic-reviewer agent.
-  </commentary>
-  </example>
-mode: primary
+mode: all
 permission:
   bash: deny
   edit: deny

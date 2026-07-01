@@ -10,7 +10,7 @@
 | 层级 | 目录 | 作者 | 说明 |
 |------|------|------|------|
 | Conception（构想层） | `conception/` | 人工编写 | 设计构想，作者对协议、系统和应用边界的原始设计。 |
-| Decision（决策层） | `decision/` | AI 生成 + 人工审阅 | 架构决策，仅记录 Conception 尚未明确的补充决策（`DEC-NNNN`）。 |
+| Decision（决策层） | `decision/` | AI 生成 + 人工审阅 | 架构决策，仅记录 Conception 尚未明确的补充决策。 |
 | Proposal（提案层） | `proposal/` | AI 生成 | 详细技术规格，追溯自 Conception + Decision。 |
 | Plan（方案层） | `plan/` | AI 生成 | 按阶段的实施计划（TDD 任务、包边界、文件清单），追溯自 Proposal。 |
 
@@ -52,7 +52,7 @@
 - 新增 Decision 前必须先检查 `conception/` 是否已经明确该规则。
 - 若 Conception 已明确，直接引用 Conception，不新增 Decision。
 - 若后续 Conception 修订吸收了某个 Decision，应删除或标记该 Decision 已被吸收。
-- Decision 文件命名为 `DEC-NNNN-<short-description>.md`。
+- Decision 文件命名为 `DEC-<NNNN>-<short-description>.md`。其中 `<NNNN>` 为序号，可以有类别区分（如 `0201`，第2类第1项），也可没有类别（如 `0001`）。
 
 
 ## 技术提案（Proposal）
@@ -67,7 +67,7 @@
 维护规则：
 
 - Proposal 的权威性低于 Conception 与 Decision。
-- 每篇「来源追溯」必须可回溯到具体 Conception 章节与 `DEC-NNNN`。
+- 每篇「来源追溯」必须可回溯到具体 Conception 章节与 `DEC-<NNNN>`。
 - 待决项严格限于全局待决集，相关规格须显式标注，不得默认选值固化。
 
 
@@ -82,7 +82,6 @@
 
 维护规则：
 
-- 决策引用为 `DEC-NNNN` 且主题匹配。
+- 决策引用为 `DEC-<NNNN>` 且主题匹配。
 - 待决项对应的 Task 显式标注阻塞/占位。
 - 实现任何功能前，应先读对应 `plan/` 文件，再回溯 `proposal/`，如有疑问查 `decision/` 与 `conception/`。
-

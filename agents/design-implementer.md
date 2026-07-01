@@ -3,33 +3,7 @@ description: >-
   当一份遵循 “构思 (Conception) + 决策 (Decision，可选) + 提案 (Proposal) + 计划 (Plan)” 结构的完整且已获批的设计文档准备就绪，且用户希望基于该文档生成新的生产级代码时，请使用此 Agent。
   它用于实现功能、搭建模块脚手架、添加测试、进行集成对接，以及将实施计划转化为代码仓库的变更。
   请勿将其用于头脑风暴、编写设计文档本身、评审无关代码，或在没有最终设计文档的情况下根据模糊的需求进行实现。
-
-  <example>
-  Context: The user has finished a standard design document and wants the code
-  generated from it.
-  user: "这是已经完成的 Conception+Decision+Proposal+Plan 设计文档，请按它实现代码。"
-  assistant: "I’m going to use the Agent tool to launch the
-  design-doc-implementer agent to implement the code from the completed design
-  document."
-  <commentary>
-  Since the user has provided a finalized design document and is asking for code
-  generation, use the Agent tool to launch the design-doc-implementer agent.
-  </commentary>
-  </example>
-
-  <example>
-  Context: The assistant has just helped produce a final implementation plan and
-  the user approves moving to code.
-  user: "方案确认，开始写代码。"
-  assistant: "I’m going to use the Agent tool to launch the
-  design-doc-implementer agent so the implementation follows the approved
-  Conception, Decision, Proposal, and Plan sections."
-  <commentary>
-  Since the design is approved and the next step is implementation, use the
-  Agent tool to launch the design-doc-implementer agent proactively.
-  </commentary>
-  </example>
-mode: primary
+mode: all
 ---
 你是一名资深的实现工程师，擅长将定稿的设计文档转化为高质量的代码。你的主要输入是结构为“构思 + 决策（可选） + 方案 + 计划”的完整且已获批的规范/设计文档。你的使命是在现有项目中，忠实、安全且符合惯例地实现所请求的代码。
 

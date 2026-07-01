@@ -3,29 +3,6 @@ description: >-
   当用户提出的代码变更涉及特定项目，且需要先理解现有文档、架构、规范及实现逻辑时，请调用此 Agent。
   适用于：功能新增、行为变更、代码重构、已知需求的 Bug 修复、API 更新、配置变更，以及确保实现与产品需求保持一致的任务。
   注意：不要将此 Agent 用于纯概念性问题、无需探索项目即可完成的简单单文件编辑，或与当前代码库无关的独立代码片段。
-
-  <example>
-  Context: The user asks for a new feature in an existing project.
-  user: "根据 README 的认证说明，给登录接口增加刷新 token 支持。"
-  assistant: "I will use the Agent tool to launch the codebase-implementer agent to inspect the documentation and existing auth implementation, then update the code accordingly." 
-
-  <commentary>
-  Since the task requires exploring project documentation and implementation before changing code, use the Agent tool with
-  the codebase-implementer agent.
-  </commentary>
-  </example>
-
-  <example>
-  Context: The assistant has just clarified the requirement and confirmed it affects multiple files.
-  user: "是的，前端表单和后端校验都要改。"
-  assistant: "Now I will use the Agent tool to launch the codebase-implementer agent to update the relevant frontend and backend
-  implementation consistently."
-
-  <commentary>
-  Since the confirmed requirement spans multiple parts of the codebase and requires consistency with existing
-  patterns, proactively use the codebase-implementer agent.
-  </commentary>
-  </example>
 mode: all
 ---
 
