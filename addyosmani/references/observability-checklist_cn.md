@@ -1,91 +1,91 @@
-# Observability Checklist（可观测性检查清单）
+# 可观测性检查清单
 
-生产代码埋点快速参考。配合 `observability-and-instrumentation` skill 使用。
+在生产环境代码中进行埋点的快速参考。可与 `observability-and-instrumentation` skill 配合使用。
 
 ## 目录
 
-- [On-Call Questions（On-Call 问题——从这里开始）](#on-call-question-on-call-问题从这里开始)
-- [Structured Logging（结构化日志）](#structured-logging结构化日志)
-- [Metrics（指标）](#metrics指标)
-- [Distributed Tracing（分布式追踪）](#distributed-tracing分布式追踪)
-- [Alerting（告警）](#alerting告警)
-- [Dashboards（仪表盘）](#dashboards仪表盘)
-- [Verify the Telemetry（验证遥测）](#verify-the-telemetry验证遥测)
-- [Pre-Launch Gate（发布前关卡）](#pre-launch-gate发布前关卡)
+- [On-Call 问题（从这里开始）](#on-call-问题从这里开始)
+- [结构化日志](#结构化日志)
+- [指标（Metrics）](#指标metrics)
+- [分布式追踪](#分布式追踪)
+- [告警](#告警)
+- [仪表盘](#仪表盘)
+- [验证遥测数据](#验证遥测数据)
+- [上线前检查点](#上线前检查点)
 
-## On-Call Questions（On-Call 问题——从这里开始）
+## On-Call 问题（从这里开始）
 
-没有问题的遥测只是噪音。在做任何埋点之前：
+没有明确问题的遥测数据就是噪音。在进行任何埋点之前：
 
-- [ ] 写下 On-Call 工程师将会问的关于此功能的 2–4 个问题
-- [ ] 下方的每个信号都映射到其中一个问题
-- [ ] 每个问题与正确的信号类型匹配：指标说明*某处*出了问题，追踪说明*哪里*出了问题，日志说明*为什么*出了问题
+- [ ] 已写下 2–4 个 on-call 工程师会针对该功能提出的问题
+- [ ] 下方每一项信号都能对应到其中一个问题
+- [ ] 每个问题都匹配了正确的信号类型：metrics 说明**有**问题，traces 说明问题**在哪**，logs 说明**为什么**出问题
 
-## Structured Logging（结构化日志）
+## 结构化日志
 
-- [ ] 日志是结构化的（JSON），具有稳定的 event name——而非自由格式字符串
-- [ ] 每条日志行都携带 correlation/request ID，在系统边界处生成或接受
-- [ ] Correlation ID 在每次外呼调用和异步边界上传播（HTTP headers、队列元数据）
-- [ ] 日志级别保持一致：`error` = 不变量被破坏，可能需要人工介入；`warn` = 降级但已处理；`info` = 重要的业务事件；`debug` = 生产环境关闭
-- [ ] 日志行中无密钥、Token、密码或未脱敏的 PII（来自 `security-and-hardening` 的硬性规则）
-- [ ] 字段使用 allowlist——无完整请求/响应体，无 auth headers
-- [ ] 外部服务调用仅记录元数据：端点、状态、延迟、重试次数、脱敏的标识符
-- [ ] 实际日志输出已抽查：结构化字段，而非 `[object Object]`
+- [ ] 日志采用结构化格式（JSON），具有稳定的事件名称——而非自由文本字符串
+- [ ] 每条日志都携带 correlation/request ID，该 ID 在系统边界处生成或接收
+- [ ] Correlation ID 在每次出站调用和异步边界处进行传播（HTTP headers、queue metadata）
+- [ ] 日志级别保持一致：`error` = 不变量被破坏，可能需要人工介入；`warn` = 功能降级但已处理；`info` = 重要业务事件；`debug` = 生产环境中关闭
+- [ ] 任何日志行中都不包含 secrets、tokens、passwords 或未脱敏的 PII（来自 `security-and-hardening` 的硬性规则）
+- [ ] 字段采用白名单机制——不记录完整的 request/response bodies，不记录 auth headers
+- [ ] 外部服务调用仅记录元数据：endpoint、status、latency、attempt count、已脱敏的 identifiers
+- [ ] 实际日志输出经过抽查：是结构化字段，而非 `[object Object]`
 
-## Metrics（指标）
+## 指标（Metrics）
 
-- [ ] 每个端点和每个外部依赖均已实施 **RED** 埋点：Rate（速率）、Errors（错误）、Duration（延迟）
-- [ ] 每个资源（队列、连接池、主机）均已实施 **USE** 埋点：Utilization（利用率）、Saturation（饱和度）、Errors（错误）
-- [ ] 延迟使用直方图；p50/p95/p99 可查询——绝不使用平均值
-- [ ] 所有 label 来自小型固定集合（路由模板、状态码类别、provider 名称）
-- [ ] 无无限制的 label 值：无 user ID、tenant ID、email、原始 URL、request ID 或错误消息文本
-- [ ] 状态码按类别分组（`5xx`，而非 `503`）
-- [ ] 每个 worker/queue 跟踪队列深度和处理延迟
+- [ ] 每个 endpoint 和每个外部依赖都已接入 **RED** 指标：Rate、Errors、Duration
+- [ ] 每个资源（queues、pools、hosts）都已接入 **USE** 指标：Utilization、Saturation、Errors
+- [ ] Latency 使用 histogram 表示；p50/p95/p99 可查询——绝不使用平均值
+- [ ] 所有 label 均来自有限且固定的集合（route template、status class、provider name）
+- [ ] 不存在无界的 label 值：不包含 user IDs、tenant IDs、emails、raw URLs、request IDs 或 error message 文本
+- [ ] Status codes 按类别分组（使用 `5xx`，而非 `503`）
+- [ ] 每个 worker/queue 都追踪了 queue depth 和 processing duration
 
-## Distributed Tracing（分布式追踪）
+## 分布式追踪
 
-- [ ] OpenTelemetry（或等价方案）在服务启动时、其他导入之前初始化
-- [ ] HTTP、gRPC 和 DB 客户端已启用自动埋点
-- [ ] Trace 上下文在每次外呼调用上传播（W3C `traceparent`/`tracestate`），并从每次入站请求中提取
-- [ ] 上下文在异步边界上存活——队列消息携带 Trace 元数据
-- [ ] 手动 Span 仅在有意义的内部工作单元上创建，并附带 On-Call 会用来过滤的属性
-- [ ] Span 属性中无密钥或 PII
-- [ ] Head-based 采样以低默认比例进行；若 Tail Sampling 可用，则保留 100% 的错误
+- [ ] OpenTelemetry（或同等方案）在服务启动时初始化，且先于其他 imports
+- [ ] 已为 HTTP、gRPC 和 DB clients 启用自动埋点
+- [ ] Trace context 在每次出站调用时传播（W3C `traceparent`/`tracestate`），并从每个入站请求中提取
+- [ ] Context 能够跨越异步边界——queue messages 携带 trace metadata
+- [ ] 手动 span 仅围绕有意义的内部工作单元创建，并附带 on-call 人员用于筛选的 attributes
+- [ ] span attributes 中不包含 secrets 或 PII
+- [ ] 采用基于 header 的采样，默认使用较低采样率；若支持 tail sampling，则 100% 保留 errors
 
-## Alerting（告警）
+## 告警
 
-- [ ] 每条告警基于症状（错误率、p99 延迟、队列积压时间）——原因（CPU、磁盘、重启）放到仪表盘，而非告警通知
-- [ ] 每条告警可操作；对"忽略就好，会自动恢复"的告警予以删除
-- [ ] 每条告警链接到 runbook——至少三行：含义、首要查询命令、升级路径
-- [ ] 阈值和持续时长由 SLO 或历史数据论证，而非猜测
-- [ ] 仅两个严重级别：**page**（影响用户，立即处理）和 **ticket**（降级，本周处理）
-- [ ] 每条新告警测试触发一次：到达了正确的渠道，runbook 链接能正常工作
-- [ ] 没有每天触发却被无操作确认的告警
+- [ ] 每条告警都基于症状（error rate、p99 latency、queue age）——原因类指标（CPU、disk、restarts）放在 dashboards 中，而非触发 pager
+- [ ] 每条告警都是可执行的；"忽略它，会自动恢复"类的告警已被删除
+- [ ] 每条告警都链接到 runbook——至少包含三行内容：含义说明、首先要执行的查询、升级路径
+- [ ] 阈值和持续时间由 SLO 或历史数据作为依据，而非凭猜测
+- [ ] 仅有两个严重级别：**page**（影响用户，需立即处理）和 **ticket**（功能降级，本周内处理）
+- [ ] 每条新告警都经过一次测试触发：确认到达了正确的 channel，且 runbook 链接可用
+- [ ] 不存在每天触发但只是被确认而未采取行动的告警
 
-## Dashboards（仪表盘）
+## 仪表盘
 
-- [ ] 服务健康仪表盘存在：错误率、p99 延迟、流量、饱和度
-- [ ] 依赖健康面板按服务显示错误率和延迟
-- [ ] 仪表盘能回答本清单顶部的 On-Call 问题——而非"除了答案什么都展示了"
+- [ ] 服务健康仪表盘已存在：error rate、latency p99、traffic、saturation
+- [ ] 依赖健康面板展示各服务的 error rates 和 latency
+- [ ] 仪表盘能回答本清单顶部的 on-call 问题——而非"除了答案以外的所有内容"
 - [ ] 默认时间范围合理（1h–6h，而非 30d）
 
-## Verify the Telemetry（验证遥测）
+## 验证遥测数据
 
-埋点也是代码，可能出错：
+埋点本身也是代码，可能会出错：
 
-- [ ] 在 staging 环境强制触发了一个错误 → 能通过 correlation ID 在日志中找到它
-- [ ] 发送了测试流量 → 指标序列以预期的 label 和合理的值出现
-- [ ] 在追踪 UI 中端到端跟踪了一个请求 → 没有断开的 Span
-- [ ] 仅凭遥测就诊断出一次人为触发的故障，无需阅读源代码
+- [ ] 在 staging 中强制触发一个错误 → 通过 correlation ID 在日志中找到了它
+- [ ] 发送测试流量 → metric series 以预期的 label 和合理的值出现
+- [ ] 在 tracing UI 中端到端追踪了一个请求 → 没有断裂的 span
+- [ ] 仅通过遥测数据就诊断出了一个人为制造的故障，无需阅读源码
 
-## Pre-Launch Gate（发布前关卡）
+## 上线前检查点
 
-在功能发布到生产环境之前，以下所有条件必须为真：
+在功能发布到生产环境之前，以下所有条件必须满足：
 
-- [ ] 结构化日志流入日志聚合器
-- [ ] 每个新端点和依赖的 RED 指标在仪表盘中可见
-- [ ] 至少配置了一条基于症状的告警，附带 runbook，已测试触发
-- [ ] 一个请求可以跨越它触及的每个服务被追踪
-- [ ] On-Call 知道 runbook 在哪里
+- [ ] 结构化日志已流入 log aggregator
+- [ ] 每个新 endpoint 和依赖的 RED metrics 在 dashboards 中可见
+- [ ] 至少配置了一条基于症状的告警，附带 runbook，并经过测试触发
+- [ ] 一个请求能够被跨所有涉及的服务进行完整追踪
+- [ ] On-call 人员知道 runbook 的位置
 
-关于发布当天的监控顺序和回滚触发条件，参见 `shipping-and-launch` skill。
+关于上线当天的监控流程和回滚触发条件，请参阅 `shipping-and-launch` skill。

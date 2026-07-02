@@ -1,36 +1,36 @@
 ---
 name: frontend-ui-engineering
-description: 构建生产级 UI。在构建或修改面向用户的界面时使用。在创建组件、实现布局、管理状态时使用，或当输出需要达到生产质量而非 AI 生成效果时使用。
+description: 构建生产级 UI。在构建或修改面向用户的界面时使用。在创建组件、实现布局、管理状态，或需要输出看起来具有生产质量而非 AI 生成的效果时使用。
 ---
 
 # 前端 UI 工程
 
 ## 概述
 
-构建具有可访问性、高性能、视觉精良的生产级用户界面。目标是让 UI 看起来像出自顶级公司中具有设计意识的工程师之手——而非由 AI 生成。这意味着真正的设计系统遵循、恰当的可访问性、深思熟虑的交互模式，杜绝通用的"AI 美学"。
+构建可访问、高性能且视觉精良的生产级用户界面。目标是让 UI 看起来像是由顶级公司中具备设计意识的工程师构建的——而不是 AI 生成的产物。这意味着要真正遵循设计系统、正确实现无障碍访问、精心设计交互模式，以及杜绝千篇一律的"AI 美学"。
 
-## 适用场景
+## 使用场景
 
 - 构建新的 UI 组件或页面
-- 修改现有的面向用户界面
+- 修改现有的面向用户的界面
 - 实现响应式布局
-- 添加交互或状态管理
+- 添加交互功能或状态管理
 - 修复视觉或 UX 问题
 
 ## 组件架构
 
 ### 文件结构
 
-将与组件相关的所有内容放在一起：
+将与组件相关的所有文件放在一起：
 
 ```
 src/components/
   TaskList/
     TaskList.tsx          # 组件实现
     TaskList.test.tsx     # 测试
-    TaskList.stories.tsx  # Storybook 故事（如使用）
-    use-task-list.ts      # 自定义 hook（如状态复杂）
-    types.ts              # 组件特定类型（如需要）
+    TaskList.stories.tsx  # Storybook stories（如使用）
+    use-task-list.ts      # 自定义 hook（如状态较复杂）
+    types.ts              # 组件专属类型（如需要）
 ```
 
 ### 组件模式
@@ -38,29 +38,29 @@ src/components/
 **优先使用组合而非配置：**
 
 ```tsx
-// 好：可组合
+// 好的做法：可组合
 <Card>
   <CardHeader>
-    <CardTitle>任务</CardTitle>
+    <CardTitle>Tasks</CardTitle>
   </CardHeader>
   <CardBody>
     <TaskList tasks={tasks} />
   </CardBody>
 </Card>
 
-// 避免：过度配置
+// 应避免：过度配置
 <Card
-  title="任务"
+  title="Tasks"
   headerVariant="large"
   bodyPadding="md"
   content={<TaskList tasks={tasks} />}
 />
 ```
 
-**保持组件职责聚焦：**
+**保持组件职责单一：**
 
 ```tsx
-// 好：只做一件事
+// 好的做法：只做一件事
 export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
   return (
     <li className="flex items-center gap-3 p-3">
@@ -82,8 +82,8 @@ export function TaskListContainer() {
   const { tasks, isLoading, error } = useTasks();
 
   if (isLoading) return <TaskListSkeleton />;
-  if (error) return <ErrorState message="加载任务失败" retry={refetch} />;
-  if (tasks.length === 0) return <EmptyState message="暂无任务" />;
+  if (error) return <ErrorState message="Failed to load tasks" retry={refetch} />;
+  if (tasks.length === 0) return <EmptyState message="No tasks yet" />;
 
   return <TaskList tasks={tasks} />;
 }
@@ -100,79 +100,79 @@ export function TaskList({ tasks }: { tasks: Task[] }) {
 
 ## 状态管理
 
-**选择能完成任务的最简单方式：**
+**选择能解决问题的最简方案：**
 
 ```
-本地状态 (useState)                → 组件特定的 UI 状态
-状态提升                            → 2-3 个兄弟组件之间共享
-Context                            → 主题、认证、语言（读多写少）
-URL 状态 (searchParams)            → 筛选、分页、可分享的 UI 状态
-服务端状态 (React Query, SWR)       → 带缓存的远程数据
-全局存储 (Zustand, Redux)           → 应用全局共享的复杂客户端状态
+Local state (useState)           → 组件专属的 UI 状态
+Lifted state                     → 2-3 个兄弟组件间共享的状态
+Context                          → 主题、认证、语言环境（读多写少）
+URL state (searchParams)         → 筛选、分页、可分享的 UI 状态
+Server state (React Query, SWR)  → 带缓存的远程数据
+Global store (Zustand, Redux)    → 全应用共享的复杂客户端状态
 ```
 
-**避免超过 3 层的 prop drilling。** 如果你在向不直接使用 props 的组件传递 props，请引入 context 或重构组件树。
+**避免 prop drilling 超过 3 层。** 如果你需要将 props 穿过不使用它们的组件传递，请引入 context 或重构组件树。
 
-## 设计系统遵循
+## 遵循设计系统
 
 ### 避免 AI 美学
 
-AI 生成的 UI 有可识别的模式。全部避免：
+AI 生成的 UI 有一些可辨识的模式。全部避免它们：
 
-| AI 默认做法 | 问题所在 | 生产级质量 |
+| AI 默认风格 | 问题所在 | 生产级做法 |
 |---|---|---|
-| 无处不在的紫色/靛蓝色 | 模型默认使用视觉上"安全"的调色板，让每个应用看起来一模一样 | 使用项目实际的色彩调色板 |
-| 过度的渐变 | 渐变增加视觉噪音，与大多数设计系统冲突 | 扁平或与设计系统匹配的微妙渐变 |
-| 到处使用大圆角 (rounded-2xl) | 最大化圆角传递"友好"感，但忽略了真实设计中圆角半径的层级关系 | 统一使用设计系统的 border-radius |
-| 通用的 hero 区域 | 模板驱动的布局，与实际内容或用户需求无关 | 内容优先的布局 |
-| Lorem ipsum 风格的文案 | 占位文本掩盖了真实内容才会暴露的布局问题（长度、换行、溢出） | 贴近实际的占位内容 |
-| 处处使用超大内边距 | 均等的慷慨内边距破坏了视觉层级，浪费屏幕空间 | 一致的空间尺寸 |
-| 千篇一律的卡片网格 | 统一网格是一种布局捷径，忽略了信息优先级和浏览模式 | 目的驱动的布局 |
-| 重阴影设计 | 多层阴影增加了与内容竞争的深度感，并在低端设备上拖慢渲染速度 | 微妙或不用阴影，除非设计系统明确要求 |
+| 到处使用紫色/靛蓝色 | 模型默认选择视觉上"安全"的配色，导致每个应用看起来都一样 | 使用项目实际的调色板 |
+| 过度使用渐变 | 渐变增加视觉噪音，与大多数设计系统冲突 | 使用与设计系统匹配的纯色或微妙渐变 |
+| 到处大圆角（rounded-2xl） | 最大圆角传达"友好"感，但忽略了真实设计中圆角半径的层级关系 | 使用设计系统中一致的 border-radius |
+| 通用 hero 区块 | 模板驱动的布局，与实际内容或用户需求无关 | 以内容为先的布局 |
+| Lorem ipsum 式文案 | 占位文本掩盖了真实内容才会暴露的布局问题（长度、换行、溢出） | 使用逼真的占位内容 |
+| 到处过大的内边距 | 均匀的宽大内边距破坏了视觉层级，浪费屏幕空间 | 使用一致的间距比例 |
+| 千篇一律的卡片网格 | 统一网格是一种布局捷径，忽略了信息优先级和浏览模式 | 以目的为导向的布局 |
+| 重度阴影设计 | 层叠阴影增加的深度感与内容竞争，并拖慢低端设备的渲染速度 | 除非设计系统要求，否则使用微妙阴影或不用阴影 |
 
 ### 间距与布局
 
-使用一致的间距尺寸体系。不要随意创造值：
+使用一致的间距比例。不要随意发明数值：
 
 ```css
-/* 使用尺度体系：0.25rem 递增（或项目使用的任何体系） */
-/* 好 */  padding: 1rem;      /* 16px */
-/* 好 */  gap: 0.75rem;       /* 12px */
-/* 不好 */ padding: 13px;      /* 不在任何尺度上 */
-/* 不好 */ margin-top: 2.3rem; /* 不在任何尺度上 */
+/* 使用比例：0.25rem 递增（或项目使用的任何比例） */
+/* 好的做法 */  padding: 1rem;      /* 16px */
+/* 好的做法 */  gap: 0.75rem;       /* 12px */
+/* 不好的做法 */ padding: 13px;      /* 不在任何比例上 */
+/* 不好的做法 */ margin-top: 2.3rem; /* 不在任何比例上 */
 ```
 
 ### 排版
 
-遵循排版层级：
+遵循标题层级：
 
 ```
-h1 → 页面标题（每页一个）
-h2 → 段落标题
-h3 → 子段落标题
-body → 默认正文
-small → 辅助/说明文本
+h1 → 页面标题（每页仅一个）
+h2 → 章节标题
+h3 → 子章节标题
+body → 默认文本
+small → 辅助/帮助文本
 ```
 
 不要跳过标题层级。不要将标题样式用于非标题内容。
 
 ### 颜色
 
-- 使用语义化颜色 token：`text-primary`、`bg-surface`、`border-default`——而非原始 hex 值
-- 确保足够的对比度（普通文本 4.5:1，大文本 3:1）
+- 使用语义化颜色 token：`text-primary`、`bg-surface`、`border-default`——而非原始十六进制值
+- 确保足够的对比度（普通文本 4.5:1，大号文本 3:1）
 - 不要仅依赖颜色传达信息（同时使用图标、文本或图案）
 
-## 可访问性（WCAG 2.1 AA）
+## 无障碍访问（WCAG 2.1 AA）
 
-每个组件必须满足以下标准：
+每个组件都必须满足以下标准：
 
 ### 键盘导航
 
 ```tsx
-// 每个可交互元素必须可通过键盘访问
-<button onClick={handleClick}>点我</button>                      // ✓ 默认可获得焦点
-<div onClick={handleClick}>点我</div>                             // ✗ 无法获得焦点
-<div role="button" tabIndex={0} onClick={handleClick}             // ✓ 但更推荐 <button>
+// 每个可交互元素都必须可通过键盘访问
+<button onClick={handleClick}>Click me</button>        // ✓ 默认可获焦
+<div onClick={handleClick}>Click me</div>               // ✗ 不可获焦
+<div role="button" tabIndex={0} onClick={handleClick}    // ✓ 但优先使用 <button>
      onKeyDown={e => {
        if (e.key === 'Enter') handleClick();
        if (e.key === ' ') e.preventDefault();
@@ -180,7 +180,7 @@ small → 辅助/说明文本
      onKeyUp={e => {
        if (e.key === ' ') handleClick();
      }}>
-  点我
+  Click me
 </div>
 ```
 
@@ -188,14 +188,14 @@ small → 辅助/说明文本
 
 ```tsx
 // 为缺少可见文本的可交互元素添加标签
-<button aria-label="关闭对话框"><XIcon /></button>
+<button aria-label="Close dialog"><XIcon /></button>
 
 // 为表单输入添加标签
-<label htmlFor="email">邮箱</label>
+<label htmlFor="email">Email</label>
 <input id="email" type="email" />
 
 // 或在没有可见标签时使用 aria-label
-<input aria-label="搜索任务" type="search" />
+<input aria-label="Search tasks" type="search" />
 ```
 
 ### 焦点管理
@@ -209,10 +209,10 @@ function Dialog({ isOpen, onClose }: DialogProps) {
     if (isOpen) closeRef.current?.focus();
   }, [isOpen]);
 
-  // 对话框打开时将焦点锁定在其内部
+  // 对话框打开时将焦点限制在其内部
   return (
     <dialog open={isOpen}>
-      <button ref={closeRef} onClick={onClose}>关闭</button>
+      <button ref={closeRef} onClick={onClose}>Close</button>
       {/* 对话框内容 */}
     </dialog>
   );
@@ -228,9 +228,9 @@ function TaskList({ tasks }: { tasks: Task[] }) {
     return (
       <div role="status" className="text-center py-12">
         <TasksEmptyIcon className="mx-auto h-12 w-12 text-muted" />
-        <h3 className="mt-2 text-sm font-medium">暂无任务</h3>
-        <p className="mt-1 text-sm text-muted">创建新任务以开始使用。</p>
-        <Button className="mt-4" onClick={onCreateTask}>创建任务</Button>
+        <h3 className="mt-2 text-sm font-medium">No tasks</h3>
+        <p className="mt-1 text-sm text-muted">Get started by creating a new task.</p>
+        <Button className="mt-4" onClick={onCreateTask}>Create Task</Button>
       </div>
     );
   }
@@ -241,7 +241,7 @@ function TaskList({ tasks }: { tasks: Task[] }) {
 
 ## 响应式设计
 
-优先针对移动端设计，然后扩展：
+先为移动端设计，再逐步扩展：
 
 ```tsx
 // Tailwind：移动优先的响应式
@@ -253,15 +253,15 @@ function TaskList({ tasks }: { tasks: Task[] }) {
 ">
 ```
 
-在以下断点测试：320px、768px、1024px、1440px。
+在以下断点进行测试：320px、768px、1024px、1440px。
 
 ## 加载与过渡
 
 ```tsx
-// 骨架屏加载（对内容区域不要使用 loading 动画）
+// 骨架屏加载（内容区域不要用 spinner）
 function TaskListSkeleton() {
   return (
-    <div className="space-y-3" aria-busy="true" aria-label="正在加载任务">
+    <div className="space-y-3" aria-busy="true" aria-label="Loading tasks">
       {Array.from({ length: 3 }).map((_, i) => (
         <div key={i} className="h-12 bg-muted animate-pulse rounded" />
       ))}
@@ -292,37 +292,37 @@ function useToggleTask() {
 }
 ```
 
-## 参见
+## 另请参阅
 
-有关详细的可访问性要求和测试工具，请参阅 `references/accessibility-checklist.md`。
+有关详细的无障碍要求和测试工具，请参阅 `references/accessibility-checklist.md`。
 
-## 常见合理化借口
+## 常见的自我合理化
 
-| 借口 | 现实 |
+| 合理化说法 | 现实 |
 |---|---|
-| "可访问性是锦上添花" | 在许多司法管辖区这是法律要求，也是工程质量标准。 |
-| "我们后面再做响应式" | 后期改造响应式设计比从一开始就构建难 3 倍。 |
-| "设计还没定稿，所以先不管样式" | 使用设计系统默认值。无样式 UI 会给评审者留下糟糕的第一印象。 |
+| "无障碍是锦上添花" | 在许多司法管辖区这是法律要求，也是工程质量标准。 |
+| "以后再适配响应式" | 事后改造响应式设计的难度是从一开始就构建的 3 倍。 |
+| "设计还没定稿，先跳过样式" | 使用设计系统默认值。未样式化的 UI 会给审查者留下糟糕的第一印象。 |
 | "这只是个原型" | 原型会变成生产代码。从一开始就把基础打好。 |
-| "AI 美学暂时没问题" | 它传达出低质量的信号。从一开始就使用项目实际的设计系统。 |
+| "AI 美学暂时可以接受" | 它传达出低质量感。从一开始就使用项目实际的设计系统。 |
 
 ## 危险信号
 
 - 组件超过 200 行（拆分它们）
-- 内联样式或任意的像素值
+- 行内样式或随意的像素值
 - 缺少错误状态、加载状态或空状态
-- 没有进行键盘导航测试
-- 仅用颜色作为状态的唯一指示（没有文本或图标就使用红/绿色）
-- 通用的"AI 风格"（紫色渐变、超大卡片、千篇一律的布局）
+- 未进行键盘导航测试
+- 仅用颜色作为状态指示（红/绿而没有文本或图标）
+- 千篇一律的"AI 外观"（紫色渐变、超大卡片、模板布局）
 
 ## 验证
 
-构建 UI 之后：
+构建 UI 后：
 
-- [ ] 组件渲染时无控制台错误
-- [ ] 所有可交互元素均可通过键盘访问（通过 Tab 键浏览页面）
-- [ ] 屏幕阅读器能够传达页面的内容和结构
-- [ ] 响应式：在 320px、768px、1024px、1440px 下均正常工作
-- [ ] 加载、错误和空状态全部得到处理
-- [ ] 遵循项目设计系统（间距、颜色、排版）
-- [ ] 开发工具或 axe-core 中没有可访问性警告
+- [ ] 组件渲染无控制台错误
+- [ ] 所有可交互元素可通过键盘访问（用 Tab 键遍历页面）
+- [ ] 屏幕阅读器能传达页面的内容和结构
+- [ ] 响应式：在 320px、768px、1024px、1440px 下正常工作
+- [ ] 加载状态、错误状态和空状态均已处理
+- [ ] 遵循项目的设计系统（间距、颜色、排版）
+- [ ] 开发工具或 axe-core 中无无障碍警告

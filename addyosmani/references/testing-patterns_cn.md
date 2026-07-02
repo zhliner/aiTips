@@ -1,39 +1,39 @@
-# Testing Patterns Reference（测试模式参考）
+# 测试模式参考
 
 全栈常用测试模式快速参考。配合 `test-driven-development` skill 使用。
 
 ## 目录
 
-- [Test Structure（测试结构——Arrange-Act-Assert）](#test-structure-测试结构arrange-act-assert)
-- [Test Naming Conventions（测试命名规范）](#test-naming-conventions-测试命名规范)
-- [Common Assertions（常用断言）](#common-assertions-常用断言)
-- [Mocking Patterns（Mock 模式）](#mocking-patterns-mock-模式)
-- [React/Component Testing（React/组件测试）](#reactcomponent-testing-react组件测试)
-- [API / Integration Testing（API / 集成测试）](#api--integration-testing-api--集成测试)
-- [E2E Testing（E2E 测试——Playwright）](#e2e-testing-e2e-测试playwright)
-- [Test Anti-Patterns（测试反模式）](#test-anti-patterns-测试反模式)
+- [测试结构（Arrange-Act-Assert）](#测试结构arrange-act-assert)
+- [测试命名规范](#测试命名规范)
+- [常用断言](#常用断言)
+- [Mock 模式](#mock-模式)
+- [React/组件测试](#react组件测试)
+- [API / 集成测试](#api--集成测试)
+- [E2E 测试（Playwright）](#e2e-测试playwright)
+- [测试反模式](#测试反模式)
 
-## Test Structure（测试结构——Arrange-Act-Assert）
+## 测试结构（Arrange-Act-Assert）
 
 ```typescript
 it('describes expected behavior', () => {
-  // Arrange：设置测试数据和前置条件
+  // Arrange: 准备测试数据和前置条件
   const input = { title: 'Test Task', priority: 'high' };
 
-  // Act：执行被测试的操作
+  // Act: 执行被测试的操作
   const result = createTask(input);
 
-  // Assert：验证结果
+  // Assert: 验证结果
   expect(result.title).toBe('Test Task');
   expect(result.priority).toBe('high');
   expect(result.status).toBe('pending');
 });
 ```
 
-## Test Naming Conventions（测试命名规范）
+## 测试命名规范
 
 ```typescript
-// 模式：[单元] [期望行为] [条件]
+// 模式: [单元] [预期行为] [条件]
 describe('TaskService.createTask', () => {
   it('creates a task with default pending status', () => {});
   it('throws ValidationError when title is empty', () => {});
@@ -42,15 +42,15 @@ describe('TaskService.createTask', () => {
 });
 ```
 
-## Common Assertions（常用断言）
+## 常用断言
 
 ```typescript
 // 相等性
-expect(result).toBe(expected);           // 严格相等（===）
+expect(result).toBe(expected);           // 严格相等 (===)
 expect(result).toEqual(expected);        // 深度相等（对象/数组）
 expect(result).toStrictEqual(expected);  // 深度相等 + 类型匹配
 
-// 真值
+// 真值性
 expect(result).toBeTruthy();
 expect(result).toBeFalsy();
 expect(result).toBeNull();
@@ -81,9 +81,9 @@ await expect(asyncFn()).resolves.toBe(value);
 await expect(asyncFn()).rejects.toThrow(Error);
 ```
 
-## Mocking Patterns（Mock 模式）
+## Mock 模式
 
-### Mock Functions（Mock 函数）
+### Mock 函数
 
 ```typescript
 const mockFn = jest.fn();
@@ -96,7 +96,7 @@ expect(mockFn).toHaveBeenCalledWith('arg1', 'arg2');
 expect(mockFn).toHaveBeenCalledTimes(3);
 ```
 
-### Mock Modules（Mock 模块）
+### Mock 模块
 
 ```typescript
 // Mock 整个模块
@@ -111,18 +111,18 @@ jest.mock('./utils', () => ({
 }));
 ```
 
-### Mock at Boundaries Only（仅在边界处 Mock）
+### 仅在边界处 Mock
 
 ```
-Mock 以下：                      不要 Mock 以下：
-├── 数据库调用                    ├── 内部工具函数
-├── HTTP 请求                     ├── 业务逻辑
-├── 文件系统操作                  ├── 数据转换
-├── 外部 API 调用                 ├── 验证函数
-└── 时间/日期（必要时）           └── 纯函数
+Mock 这些:                        不要 Mock 这些:
+├── 数据库调用                     ├── 内部工具函数
+├── HTTP 请求                      ├── 业务逻辑
+├── 文件系统操作                    ├── 数据转换
+├── 外部 API 调用                  ├── 验证函数
+└── 时间/日期（需要时）              └── 纯函数
 ```
 
-## React/Component Testing（React/组件测试）
+## React/组件测试
 
 ```tsx
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
@@ -132,7 +132,7 @@ describe('TaskForm', () => {
     const onSubmit = jest.fn();
     render(<TaskForm onSubmit={onSubmit} />);
 
-    // 通过无障碍 role/label 查找元素（而非 test ID）
+    // 通过可访问的角色/标签查找元素（而非 test ID）
     await screen.findByRole('textbox', { name: /title/i });
     fireEvent.change(screen.getByRole('textbox', { name: /title/i }), {
       target: { value: 'New Task' },
@@ -154,7 +154,7 @@ describe('TaskForm', () => {
 });
 ```
 
-## API / Integration Testing（API / 集成测试）
+## API / 集成测试
 
 ```typescript
 import request from 'supertest';
@@ -194,7 +194,7 @@ describe('POST /api/tasks', () => {
 });
 ```
 
-## E2E Testing（E2E 测试——Playwright）
+## E2E 测试（Playwright）
 
 ```typescript
 import { test, expect } from '@playwright/test';
@@ -211,7 +211,7 @@ test('user can create and complete a task', async ({ page }) => {
   await page.fill('[name="title"]', 'Buy groceries');
   await page.click('button:has-text("Create")');
 
-  // 验证任务出现
+  // 验证任务已出现
   await expect(page.locator('text=Buy groceries')).toBeVisible();
 
   // 完成任务
@@ -222,15 +222,15 @@ test('user can create and complete a task', async ({ page }) => {
 });
 ```
 
-## Test Anti-Patterns（测试反模式）
+## 测试反模式
 
 | 反模式 | 问题 | 更好的做法 |
 |---|---|---|
-| 测试实现细节 | 重构时会失败 | 测试输入/输出 |
-| 所有内容都做 snapshot | 没人审查 snapshot diff | 断言具体值 |
+| 测试实现细节 | 重构时就会失败 | 测试输入/输出 |
+| 到处使用快照 | 没人会审查快照差异 | 断言具体值 |
 | 共享可变状态 | 测试之间互相污染 | 每个测试独立 setup/teardown |
-| 测试第三方代码 | 浪费时间，不是你的 bug | 在边界处 Mock |
-| 跳过测试以通过 CI | 掩盖真正的 bug | 修复或删除测试 |
-| 永久使用 `test.skip` | 死代码 | 删除或修复它 |
-| 过于宽泛的断言 | 无法捕获回归问题 | 断言要具体 |
-| 无异步错误处理 | 错误被吞没，假通过 | 始终 `await` 异步测试 |
+| 测试第三方代码 | 浪费时间，那不是你的 bug | Mock 边界 |
+| 跳过测试让 CI 通过 | 隐藏真实 bug | 修复或删除该测试 |
+| 永久使用 `test.skip` | 死代码 | 移除或修复 |
+| 断言过于宽泛 | 无法捕获回归 | 具体明确 |
+| 不处理异步错误 | 错误被吞，虚假通过 | 始终 `await` 异步测试 |
