@@ -15,22 +15,21 @@ description: 当面临 2 个以上独立的、可以在没有共享状态或顺�
 
 ## 何时使用
 
-```dot
-digraph when_to_use {
-    "Multiple failures?" [shape=diamond];
-    "Are they independent?" [shape=diamond];
-    "Single agent investigates all" [shape=box];
-    "One agent per problem domain" [shape=box];
-    "Can they work in parallel?" [shape=diamond];
-    "Sequential agents" [shape=box];
-    "Parallel dispatch" [shape=box];
+```mermaid
+flowchart TD
+    A{Multiple failures?}
+    B{Are they independent?}
+    C[Single agent investigates all]
+    D[One agent per problem domain]
+    E{Can they work in parallel?}
+    F[Sequential agents]
+    G[Parallel dispatch]
 
-    "Multiple failures?" -> "Are they independent?" [label="yes"];
-    "Are they independent?" -> "Single agent investigates all" [label="no - related"];
-    "Are they independent?" -> "Can they work in parallel?" [label="yes"];
-    "Can they work in parallel?" -> "Parallel dispatch" [label="yes"];
-    "Can they work in parallel?" -> "Sequential agents" [label="no - shared state"];
-}
+    A -- yes --> B
+    B -- no - related --> C
+    B -- yes --> E
+    E -- yes --> G
+    E -- no - shared state --> F
 ```
 
 **适用于：**

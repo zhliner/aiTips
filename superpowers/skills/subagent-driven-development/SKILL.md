@@ -17,22 +17,21 @@ description: 在当前会话中执行具有独立任务的实施计划时使用
 
 ## 何时使用
 
-```dot
-digraph when_to_use {
-    "有实施计划吗？" [shape=diamond];
-    "任务大多独立？" [shape=diamond];
-    "保持在当前会话？" [shape=diamond];
-    "subagent-driven-development" [shape=box];
-    "executing-plans" [shape=box];
-    "手动执行或先做头脑风暴" [shape=box];
+```mermaid
+flowchart TD
+    A{有实施计划吗？}
+    B{任务大多独立？}
+    C{保持在当前会话？}
+    D[subagent-driven-development]
+    E[executing-plans]
+    F[手动执行或先做头脑风暴]
 
-    "有实施计划吗？" -> "任务大多独立？" [label="是"];
-    "有实施计划吗？" -> "手动执行或先做头脑风暴" [label="否"];
-    "任务大多独立？" -> "保持在当前会话？" [label="是"];
-    "任务大多独立？" -> "手动执行或先做头脑风暴" [label="否 - 紧密耦合"];
-    "保持在当前会话？" -> "subagent-driven-development" [label="是"];
-    "保持在当前会话？" -> "executing-plans" [label="否 - 并行会话"];
-}
+    A -- 是 --> B
+    A -- 否 --> F
+    B -- 是 --> C
+    B -- 否 - 紧密耦合 --> F
+    C -- 是 --> D
+    C -- 否 - 并行会话 --> E
 ```
 
 **对比执行计划（并行会话）：**
@@ -43,42 +42,39 @@ digraph when_to_use {
 
 ## 流程
 
-```dot
-digraph process {
-    rankdir=TB;
+```mermaid
+flowchart TB
+    subgraph per_task [每个任务]
+        A[分派实施子代理<br/>./implementer-prompt.md]
+        B{实施子代理提出问题？}
+        C[回答问题，提供上下文]
+        D[实施子代理实施、测试、提交、自我审查]
+        E[写入 diff 文件<br/>分派任务审查子代理<br/>./task-reviewer-prompt.md]
+        F{任务审查者报告<br/>规范通过且质量通过？}
+        G[针对 Critical/Important<br/>发现分派修复子代理]
+        H[在待办列表和进度账本中<br/>标记任务完成]
+    end
+    I[阅读计划，记录上下文<br/>和全局约束，创建待办事项]
+    J{还有更多任务？}
+    K[分派最终代码审查子代理<br/>../requesting-code-review/code-reviewer.md]
+    L[使用<br/>superpowers:finishing-a-development-branch]
 
-    subgraph cluster_per_task {
-        label="每个任务";
-        "分派实施子代理 (./implementer-prompt.md)" [shape=box];
-        "实施子代理提出问题？" [shape=diamond];
-        "回答问题，提供上下文" [shape=box];
-        "实施子代理实施、测试、提交、自我审查" [shape=box];
-        "写入 diff 文件，分派任务审查子代理 (./task-reviewer-prompt.md)" [shape=box];
-        "任务审查者报告规范 ✅ 且质量通过？" [shape=diamond];
-        "针对 Critical/Important 发现分派修复子代理" [shape=box];
-        "在待办列表和进度账本中标记任务完成" [shape=box];
-    }
+    I --> A
+    A --> B
+    B -- 是 --> C
+    C --> A
+    B -- 否 --> D
+    D --> E
+    E --> F
+    F -- 否 --> G
+    G -- 重新审查 --> E
+    F -- 是 --> H
+    H --> J
+    J -- 是 --> A
+    J -- 否 --> K
+    K --> L
 
-    "阅读计划，记录上下文和全局约束，创建待办事项" [shape=box];
-    "还有更多任务？" [shape=diamond];
-    "分派最终代码审查子代理 (../requesting-code-review/code-reviewer.md)" [shape=box];
-    "使用 superpowers:finishing-a-development-branch" [shape=box style=filled fillcolor=lightgreen];
-
-    "阅读计划，记录上下文和全局约束，创建待办事项" -> "分派实施子代理 (./implementer-prompt.md)";
-    "分派实施子代理 (./implementer-prompt.md)" -> "实施子代理提出问题？";
-    "实施子代理提出问题？" -> "回答问题，提供上下文" [label="是"];
-    "回答问题，提供上下文" -> "分派实施子代理 (./implementer-prompt.md)";
-    "实施子代理提出问题？" -> "实施子代理实施、测试、提交、自我审查" [label="否"];
-    "实施子代理实施、测试、提交、自我审查" -> "写入 diff 文件，分派任务审查子代理 (./task-reviewer-prompt.md)";
-    "写入 diff 文件，分派任务审查子代理 (./task-reviewer-prompt.md)" -> "任务审查者报告规范 ✅ 且质量通过？";
-    "任务审查者报告规范 ✅ 且质量通过？" -> "针对 Critical/Important 发现分派修复子代理" [label="否"];
-    "针对 Critical/Important 发现分派修复子代理" -> "写入 diff 文件，分派任务审查子代理 (./task-reviewer-prompt.md)" [label="重新审查"];
-    "任务审查者报告规范 ✅ 且质量通过？" -> "在待办列表和进度账本中标记任务完成" [label="是"];
-    "在待办列表和进度账本中标记任务完成" -> "还有更多任务？";
-    "还有更多任务？" -> "分派实施子代理 (./implementer-prompt.md)" [label="是"];
-    "还有更多任务？" -> "分派最终代码审查子代理 (../requesting-code-review/code-reviewer.md)" [label="否"];
-    "分派最终代码审查子代理 (../requesting-code-review/code-reviewer.md)" -> "使用 superpowers:finishing-a-development-branch";
-}
+    style L fill:green
 ```
 
 ## 执行前计划审查

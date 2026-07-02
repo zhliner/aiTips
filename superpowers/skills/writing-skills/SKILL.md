@@ -287,17 +287,16 @@ wc -w skills/path/SKILL.md
 
 ## 流程图使用
 
-```dot
-digraph when_flowchart {
-    "Need to show information?" [shape=diamond];
-    "Decision where I might go wrong?" [shape=diamond];
-    "Use markdown" [shape=box];
-    "Small inline flowchart" [shape=box];
+```mermaid
+flowchart TD
+    A{Need to show information?}
+    B{Decision where I might go wrong?}
+    C[Use markdown]
+    D[Small inline flowchart]
 
-    "Need to show information?" -> "Decision where I might go wrong?" [label="yes"];
-    "Decision where I might go wrong?" -> "Small inline flowchart" [label="yes"];
-    "Decision where I might go wrong?" -> "Use markdown" [label="no"];
-}
+    A -- yes --> B
+    B -- yes --> D
+    B -- no --> C
 ```
 
 **仅在以下情况使用流程图：**
@@ -599,9 +598,10 @@ example-js.js、example-py.py、example-go.go
 **为什么不好：** 质量平庸，维护负担
 
 ### ❌ 流程图中的代码
-```dot
-step1 [label="import fs"];
-step2 [label="read file"];
+```mermaid
+flowchart TD
+    step1[import fs]
+    step2[read file]
 ```
 **为什么不好：** 无法复制粘贴，难以阅读
 

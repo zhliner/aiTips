@@ -46,26 +46,28 @@ description: 在实现任何功能或修复 bug 之前使用，在编写实现�
 
 ## 红-绿-重构（Red-Green-Refactor）
 
-```dot
-digraph tdd_cycle {
-    rankdir=LR;
-    red [label="RED\n编写失败测试", shape=box, style=filled, fillcolor="#ffcccc"];
-    verify_red [label="验证失败\n是否正确", shape=diamond];
-    green [label="GREEN\n最简代码", shape=box, style=filled, fillcolor="#ccffcc"];
-    verify_green [label="验证通过\n全绿", shape=diamond];
-    refactor [label="REFACTOR\n清理", shape=box, style=filled, fillcolor="#ccccff"];
-    next [label="下一个", shape=ellipse];
+```mermaid
+flowchart LR
+    red[RED\n编写失败测试]
+    verify_red{验证失败\n是否正确}
+    green[GREEN\n最简代码]
+    verify_green{验证通过\n全绿}
+    refactor[REFACTOR\n清理]
+    next([下一个])
 
-    red -> verify_red;
-    verify_red -> green [label="是"];
-    verify_red -> red [label="失败方式\n不对"];
-    green -> verify_green;
-    verify_green -> refactor [label="是"];
-    verify_green -> green [label="否"];
-    refactor -> verify_green [label="保持\n绿色"];
-    verify_green -> next;
-    next -> red;
-}
+    red --> verify_red
+    verify_red -- 是 --> green
+    verify_red -- 失败方式\n不对 --> red
+    green --> verify_green
+    verify_green -- 是 --> refactor
+    verify_green -- 否 --> green
+    refactor -- 保持\n绿色 --> verify_green
+    verify_green --> next
+    next --> red
+
+    style red fill:#ffcccc
+    style green fill:#ccffcc
+    style refactor fill:#ccccff
 ```
 
 ### RED — 编写失败测试
