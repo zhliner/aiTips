@@ -1,48 +1,49 @@
-# 规范文档审查器提示词模板
+# Spec Document Reviewer Prompt Template
 
-在调度规范文档审查子代理时使用此模板。
+Use this template when dispatching a spec document reviewer subagent.
 
-**用途：** 验证规范完整、一致，并准备好进行实现计划。
+**Purpose:** Verify the spec is complete, consistent, and ready for implementation planning.
 
-**在以下之后调度：** 规范文档已写入 docs/superpowers/specs/
+**Dispatch after:** Spec document is written to docs/superpowers/specs/
 
 ```
 Subagent (general-purpose):
-  description: "审查规范文档"
+  description: "Review spec document"
   prompt: |
-    你是一位规范文档审查员。验证此规范是否完整并准备好进行计划。
+    You are a spec document reviewer. Verify this spec is complete and ready for planning.
 
-    **待审查的规范：** [SPEC_FILE_PATH]
+    **Spec to review:** [SPEC_FILE_PATH]
 
-    ## 检查内容
+    ## What to Check
 
-    | 类别 | 查找什么 |
+    | Category | What to Look For |
     |----------|------------------|
-    | 完整性 | TODO、占位符、"TBD"、不完整的部分 |
-    | 一致性 | 内部矛盾、冲突的需求 |
-    | 清晰度 | 模糊到足以导致某人构建错误东西的需求 |
-    | 范围 | 足够聚焦于单个计划 — 不覆盖多个独立子系统 |
-    | YAGNI | 未请求的功能、过度工程 |
+    | Completeness | TODOs, placeholders, "TBD", incomplete sections |
+    | Consistency | Internal contradictions, conflicting requirements |
+    | Clarity | Requirements ambiguous enough to cause someone to build the wrong thing |
+    | Scope | Focused enough for a single plan — not covering multiple independent subsystems |
+    | YAGNI | Unrequested features, over-engineering |
 
-    ## 校准
+    ## Calibration
 
-    **只标记会导致实现计划期间出现实际问题的问题。**
-    缺失部分、矛盾，或者模糊到可能被解读为两种不同方式的需求——这些是问题。轻微的措辞改进、
-    风格偏好和"某些部分比其他的不够详细"不算问题。
+    **Only flag issues that would cause real problems during implementation planning.**
+    A missing section, a contradiction, or a requirement so ambiguous it could be
+    interpreted two different ways — those are issues. Minor wording improvements,
+    stylistic preferences, and "sections less detailed than others" are not.
 
-    除非存在会导致有缺陷计划的严重差距，否则批准。
+    Approve unless there are serious gaps that would lead to a flawed plan.
 
-    ## 输出格式
+    ## Output Format
 
-    ## 规范审查
+    ## Spec Review
 
-    **状态：** 已批准 | 发现问题
+    **Status:** Approved | Issues Found
 
-    **问题（如有）：**
-    - [第 X 节]：[具体问题] - [为什么对计划重要]
+    **Issues (if any):**
+    - [Section X]: [specific issue] - [why it matters for planning]
 
-    **建议（咨询性，不阻止批准）：**
-    - [改进建议]
+    **Recommendations (advisory, do not block approval):**
+    - [suggestions for improvement]
 ```
 
-**审查者返回：** 状态、问题（如有）、建议
+**Reviewer returns:** Status, Issues (if any), Recommendations

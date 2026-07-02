@@ -1,103 +1,103 @@
 ---
 name: requesting-code-review
-description: 在完成任务、实现主要功能或合并前使用，以验证工作是否符合需求
+description: Use when completing tasks, implementing major features, or before merging to verify work meets requirements
 ---
 
-# 请求代码审查（Requesting Code Review）
+# Requesting Code Review
 
-调度一个代码审查 subagent，在问题连锁放大之前捕获它们。审查者会收到精心构建的评估上下文——而不是你的 session 历史。这使审查者聚焦于工作成果而非你的思考过程，同时保留你自己的上下文用于后续工作。
+Dispatch a code reviewer subagent to catch issues before they cascade. The reviewer gets precisely crafted context for evaluation — never your session's history. This keeps the reviewer focused on the work product, not your thought process, and preserves your own context for continued work.
 
-**核心原则：** 早审查，勤审查。
+**Core principle:** Review early, review often.
 
-## 何时请求审查
+## When to Request Review
 
-**必须：**
-- subagent-driven 开发中的每个任务完成后
-- 完成主要功能后
-- 合并到 main 之前
+**Mandatory:**
+- After each task in subagent-driven development
+- After completing major feature
+- Before merge to main
 
-**可选但推荐：**
-- 卡住时（新视角）
-- 重构前（基准检查）
-- 修复复杂 bug 后
+**Optional but valuable:**
+- When stuck (fresh perspective)
+- Before refactoring (baseline check)
+- After fixing complex bug
 
-## 如何请求
+## How to Request
 
-**1. 获取 git SHA：**
+**1. Get git SHAs:**
 ```bash
-BASE_SHA=$(git rev-parse HEAD~1)  # 或 origin/main
+BASE_SHA=$(git rev-parse HEAD~1)  # or origin/main
 HEAD_SHA=$(git rev-parse HEAD)
 ```
 
-**2. 调度代码审查 subagent：**
+**2. Dispatch code reviewer subagent:**
 
-调度一个 `general-purpose` subagent，填写 [code-reviewer.md](code-reviewer.md) 中的模板
+Dispatch a `general-purpose` subagent, filling the template at [code-reviewer.md](code-reviewer.md)
 
-**占位符：**
-- `{DESCRIPTION}` — 你所构建内容的简要总结
-- `{PLAN_OR_REQUIREMENTS}` — 它应该做什么
-- `{BASE_SHA}` — 起始 commit
-- `{HEAD_SHA}` — 结束 commit
+**Placeholders:**
+- `{DESCRIPTION}` - Brief summary of what you built
+- `{PLAN_OR_REQUIREMENTS}` - What it should do
+- `{BASE_SHA}` - Starting commit
+- `{HEAD_SHA}` - Ending commit
 
-**3. 根据反馈行动：**
-- 立即修复 Critical 问题
-- 在继续前修复 Important 问题
-- 记下 Minor 问题稍后处理
-- 如果审查者错了，合理反驳（附推理）
+**3. Act on feedback:**
+- Fix Critical issues immediately
+- Fix Important issues before proceeding
+- Note Minor issues for later
+- Push back if reviewer is wrong (with reasoning)
 
-## 示例
+## Example
 
 ```
-[刚完成任务 2：添加验证函数]
+[Just completed Task 2: Add verification function]
 
-你：让我在继续之前请求代码审查。
+You: Let me request code review before proceeding.
 
 BASE_SHA=$(git log --oneline | grep "Task 1" | head -1 | awk '{print $1}')
 HEAD_SHA=$(git rev-parse HEAD)
 
-[调度代码审查 subagent]
-  DESCRIPTION: 添加了支持 4 种问题类型的 verifyIndex() 和 repairIndex()
-  PLAN_OR_REQUIREMENTS: docs/superpowers/plans/deployment-plan.md 中的任务 2
+[Dispatch code reviewer subagent]
+  DESCRIPTION: Added verifyIndex() and repairIndex() with 4 issue types
+  PLAN_OR_REQUIREMENTS: Task 2 from docs/superpowers/plans/deployment-plan.md
   BASE_SHA: a7981ec
   HEAD_SHA: 3df7661
 
-[Subagent 返回]:
-  优点: 架构清晰，测试真实
-  问题:
-    Important: 缺少进度指示器
-    Minor: 报告间隔用了魔数 (100)
-  评估: 可以继续
+[Subagent returns]:
+  Strengths: Clean architecture, real tests
+  Issues:
+    Important: Missing progress indicators
+    Minor: Magic number (100) for reporting interval
+  Assessment: Ready to proceed
 
-你：[修复进度指示器]
-[继续任务 3]
+You: [Fix progress indicators]
+[Continue to Task 3]
 ```
 
-## 与工作流的集成
+## Integration with Workflows
 
-**Subagent-Driven Development：**
-- 每个任务后审查
-- 在问题叠加之前捕获
-- 修复后再进入下一个任务
+**Subagent-Driven Development:**
+- Review after EACH task
+- Catch issues before they compound
+- Fix before moving to next task
 
-**Executing Plans：**
-- 每个任务后或在自然 checkpoint 处审查
-- 获取反馈、应用、继续
+**Executing Plans:**
+- Review after each task or at natural checkpoints
+- Get feedback, apply, continue
 
-**Ad-Hoc 开发：**
-- 合并前审查
-- 卡住时审查
+**Ad-Hoc Development:**
+- Review before merge
+- Review when stuck
 
-## 红灯警告
+## Red Flags
 
-**绝不：**
-- 因为是"简单的"就跳过审查
-- 忽略 Critical 问题
-- 未修复 Important 问题就继续
-- 与有效的技术反馈争辩
+**Never:**
+- Skip review because "it's simple"
+- Ignore Critical issues
+- Proceed with unfixed Important issues
+- Argue with valid technical feedback
 
-**如果审查者错了：**
-- 以技术推理反驳
-- 展示证明其正常工作的代码/测试
-- 请求澄清
+**If reviewer wrong:**
+- Push back with technical reasoning
+- Show code/tests that prove it works
+- Request clarification
 
-参见模板：[code-reviewer.md](code-reviewer.md)
+See template at: [code-reviewer.md](code-reviewer.md)

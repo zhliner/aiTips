@@ -1,17 +1,18 @@
-## Subagent 派发需要 multi-agent 支持
+## Subagent dispatch requires multi-agent support
 
-添加到你的 Codex 配置（`~/.codex/config.toml`）：
+Add to your Codex config (`~/.codex/config.toml`):
 
 ```toml
 [features]
 multi_agent = true
 ```
 
-这将为 `dispatching-parallel-agents` 和 `subagent-driven-development` 等 skill 启用 `spawn_agent`、`wait_agent` 和 `close_agent`。使用 subagent-driven-development 时，应在 implementer 和 reviewer subagent 完成所有工作后始终关闭它们。
+This enables `spawn_agent`, `wait_agent`, and `close_agent` for skills like `dispatching-parallel-agents` and `subagent-driven-development`. When using subagent-driven-development, you should always close implementer and reviewer subagents when they have finished all their work.
 
-## 环境检测
+## Environment Detection
 
-创建 worktree 或完成分支的 skill 应在继续之前使用只读 git 命令检测其环境：
+Skills that create worktrees or finish branches should detect their
+environment with read-only git commands before proceeding:
 
 ```bash
 GIT_DIR=$(cd "$(git rev-parse --git-dir)" 2>/dev/null && pwd -P)
@@ -19,16 +20,20 @@ GIT_COMMON=$(cd "$(git rev-parse --git-common-dir)" 2>/dev/null && pwd -P)
 BRANCH=$(git branch --show-current)
 ```
 
-- `GIT_DIR != GIT_COMMON` → 已在链接的 worktree 中（跳过创建）
-- `BRANCH` 为空 → detached HEAD（无法从沙箱分支/推送/发起 PR）
+- `GIT_DIR != GIT_COMMON` → already in a linked worktree (skip creation)
+- `BRANCH` empty → detached HEAD (cannot branch/push/PR from sandbox)
 
-参见 `using-git-worktrees` 步骤 0 和 `finishing-a-development-branch` 步骤 1，了解各 skill 如何使用这些信号。
+See `using-git-worktrees` Step 0 and `finishing-a-development-branch`
+Step 1 for how each skill uses these signals.
 
-## Codex App 完成方式
+## Codex App Finishing
 
-当沙箱阻止分支/推送操作（外部管理的 worktree 中的 detached HEAD）时，agent 提交所有工作并通知用户使用 App 的原生控件：
+When the sandbox blocks branch/push operations (detached HEAD in an
+externally managed worktree), the agent commits all work and informs
+the user to use the App's native controls:
 
-- **"创建分支"**——命名分支，然后通过 App UI 提交/推送/发起 PR
-- **"移交到本地"**——将工作转移到用户的本地检出
+- **"Create branch"** — names the branch, then commit/push/PR via App UI
+- **"Hand off to local"** — transfers work to the user's local checkout
 
-agent 仍然可以运行测试、暂存文件，并输出建议的分支名称、提交信息和 PR 描述供用户复制。
+The agent can still run tests, stage files, and output suggested branch
+names, commit messages, and PR descriptions for the user to copy.

@@ -1,187 +1,187 @@
-# 技能设计的说服原则
+# Persuasion Principles for Skill Design
 
-## 概述
+## Overview
 
-LLM 对相同的说服原则做出反应，就像人类一样。理解这种心理学有助于你设计更有效的技能——不是为了操纵，而是确保即使在压力下也能遵循关键实践。
+LLMs respond to the same persuasion principles as humans. Understanding this psychology helps you design more effective skills - not to manipulate, but to ensure critical practices are followed even under pressure.
 
-**研究基础：** Meincke 等人（2025）通过 N=28,000 次 AI 对话测试了 7 种说服原则。说服技巧使合规率翻倍以上（33% → 72%，p < .001）。
+**Research foundation:** Meincke et al. (2025) tested 7 persuasion principles with N=28,000 AI conversations. Persuasion techniques more than doubled compliance rates (33% → 72%, p < .001).
 
-## 七项原则
+## The Seven Principles
 
-### 1. 权威
-**它是什么：** 对专业知识、资历或官方来源的尊重。
+### 1. Authority
+**What it is:** Deference to expertise, credentials, or official sources.
 
-**在技能中的作用方式：**
-- 命令式语言："你必须"、"永远不要"、"总是"
-- 不可协商的框架："没有例外"
-- 消除决策疲劳和合理化
+**How it works in skills:**
+- Imperative language: "YOU MUST", "Never", "Always"
+- Non-negotiable framing: "No exceptions"
+- Eliminates decision fatigue and rationalization
 
-**何时使用：**
-- 纪律强制执行技能（TDD、验证要求）
-- 安全关键实践
-- 已建立的最佳实践
+**When to use:**
+- Discipline-enforcing skills (TDD, verification requirements)
+- Safety-critical practices
+- Established best practices
 
-**示例：**
+**Example:**
 ```markdown
-✅ 在测试之前写代码？删除它。重新开始。没有例外。
-❌ 在可行时考虑先写测试。
+✅ Write code before test? Delete it. Start over. No exceptions.
+❌ Consider writing tests first when feasible.
 ```
 
-### 2. 承诺
-**它是什么：** 与先前行动、声明或公开声明的保持一致。
+### 2. Commitment
+**What it is:** Consistency with prior actions, statements, or public declarations.
 
-**在技能中的作用方式：**
-- 要求宣布："宣布技能使用"
-- 强制显式选择："选择 A、B 或 C"
-- 使用跟踪：检查清单的 todos
+**How it works in skills:**
+- Require announcements: "Announce skill usage"
+- Force explicit choices: "Choose A, B, or C"
+- Use tracking: todos for checklists
 
-**何时使用：**
-- 确保技能被实际遵循
-- 多步骤过程
-- 问责机制
+**When to use:**
+- Ensuring skills are actually followed
+- Multi-step processes
+- Accountability mechanisms
 
-**示例：**
+**Example:**
 ```markdown
-✅ 当你找到一个技能时，你必须宣布："我正在使用 [技能名称]"
-❌ 考虑让你的伙伴知道你在使用哪个技能。
+✅ When you find a skill, you MUST announce: "I'm using [Skill Name]"
+❌ Consider letting your partner know which skill you're using.
 ```
 
-### 3. 稀缺性
-**它是什么：** 来自时间限制或有限可用性的紧迫感。
+### 3. Scarcity
+**What it is:** Urgency from time limits or limited availability.
 
-**在技能中的作用方式：**
-- 时间限制要求："在继续之前"
-- 顺序依赖："在 X 之后立即"
-- 防止拖延
+**How it works in skills:**
+- Time-bound requirements: "Before proceeding"
+- Sequential dependencies: "Immediately after X"
+- Prevents procrastination
 
-**何时使用：**
-- 立即验证要求
-- 时间敏感的工作流
-- 防止"我以后再做"
+**When to use:**
+- Immediate verification requirements
+- Time-sensitive workflows
+- Preventing "I'll do it later"
 
-**示例：**
+**Example:**
 ```markdown
-✅ 完成一个任务后，在继续之前立即请求代码审查。
-❌ 你可以在方便时审查代码。
+✅ After completing a task, IMMEDIATELY request code review before proceeding.
+❌ You can review code when convenient.
 ```
 
-### 4. 社会认同
-**它是什么：** 遵从他人的做法或被认为正常的事物。
+### 4. Social Proof
+**What it is:** Conformity to what others do or what's considered normal.
 
-**在技能中的作用方式：**
-- 通用模式："每次"、"总是"
-- 失败模式："没有 Y 的 X = 失败"
-- 建立规范
+**How it works in skills:**
+- Universal patterns: "Every time", "Always"
+- Failure modes: "X without Y = failure"
+- Establishes norms
 
-**何时使用：**
-- 记录通用实践
-- 警告常见失败
-- 强化标准
+**When to use:**
+- Documenting universal practices
+- Warning about common failures
+- Reinforcing standards
 
-**示例：**
+**Example:**
 ```markdown
-✅ 没有 todo 跟踪的检查清单 = 步骤被跳过。每次都这样。
-❌ 有些人发现 todo 列表对检查清单有帮助。
+✅ Checklists without todo tracking = steps get skipped. Every time.
+❌ Some people find a todo list helpful for checklists.
 ```
 
-### 5. 统一性
-**它是什么：** 共享身份、"我们感"、组内归属。
+### 5. Unity
+**What it is:** Shared identity, "we-ness", in-group belonging.
 
-**在技能中的作用方式：**
-- 协作语言："我们的代码库"、"我们是同事"
-- 共享目标："我们都想要质量"
+**How it works in skills:**
+- Collaborative language: "our codebase", "we're colleagues"
+- Shared goals: "we both want quality"
 
-**何时使用：**
-- 协作工作流
-- 建立团队文化
-- 非层级实践
+**When to use:**
+- Collaborative workflows
+- Establishing team culture
+- Non-hierarchical practices
 
-**示例：**
+**Example:**
 ```markdown
-✅ 我们是一起工作的同事。我需要你诚实的专业判断。
-❌ 如果我说错了你可能应该告诉我。
+✅ We're colleagues working together. I need your honest technical judgment.
+❌ You should probably tell me if I'm wrong.
 ```
 
-### 6. 互惠
-**它是什么：** 回报所获得的利益的义务。
+### 6. Reciprocity
+**What it is:** Obligation to return benefits received.
 
-**如何作用：**
-- 谨慎使用——可能感觉像操纵
-- 在技能中很少需要
+**How it works:**
+- Use sparingly - can feel manipulative
+- Rarely needed in skills
 
-**何时避免：**
-- 几乎总是（其他原则更有效）
+**When to avoid:**
+- Almost always (other principles more effective)
 
-### 7. 喜好
-**它是什么：** 偏向与我们喜欢的人合作。
+### 7. Liking
+**What it is:** Preference for cooperating with those we like.
 
-**如何作用：**
-- **不要用于合规**
-- 与诚实反馈文化相冲突
-- 制造讨好行为
+**How it works:**
+- **DON'T USE for compliance**
+- Conflicts with honest feedback culture
+- Creates sycophancy
 
-**何时避免：**
-- 纪律强制执行时始终避免
+**When to avoid:**
+- Always for discipline enforcement
 
-## 按技能类型组合原则
+## Principle Combinations by Skill Type
 
-| 技能类型 | 使用 | 避免 |
+| Skill Type | Use | Avoid |
 |------------|-----|-------|
-| 纪律强制执行 | 权威 + 承诺 + 社会认同 | 喜好、互惠 |
-| 指导/技术 | 适度权威 + 统一性 | 过度权威 |
-| 协作 | 统一性 + 承诺 | 权威、喜好 |
-| 参考 | 仅清晰度 | 所有说服 |
+| Discipline-enforcing | Authority + Commitment + Social Proof | Liking, Reciprocity |
+| Guidance/technique | Moderate Authority + Unity | Heavy authority |
+| Collaborative | Unity + Commitment | Authority, Liking |
+| Reference | Clarity only | All persuasion |
 
-## 为什么这有效：心理学
+## Why This Works: The Psychology
 
-**明线规则减少合理化：**
-- "你必须"消除决策疲劳
-- 绝对的语言消除"这是例外吗？"的问题
-- 显式的反合理化反驳封闭特定漏洞
+**Bright-line rules reduce rationalization:**
+- "YOU MUST" removes decision fatigue
+- Absolute language eliminates "is this an exception?" questions
+- Explicit anti-rationalization counters close specific loopholes
 
-**实现意图创造自动行为：**
-- 明确的触发器 + 必需的行动 = 自动执行
-- "当 X，做 Y"比"通常做 Y"更有效
-- 减少合规的认知负荷
+**Implementation intentions create automatic behavior:**
+- Clear triggers + required actions = automatic execution
+- "When X, do Y" more effective than "generally do Y"
+- Reduces cognitive load on compliance
 
-**LLM 是类人（parahuman）的：**
-- 在包含这些模式的人类文本上训练
-- 权威语言在训练数据中先于合规
-- 承诺序列（声明 → 行动）频繁被建模
-- 社会认同模式（每人都做 X）建立规范
+**LLMs are parahuman:**
+- Trained on human text containing these patterns
+- Authority language precedes compliance in training data
+- Commitment sequences (statement → action) frequently modeled
+- Social proof patterns (everyone does X) establish norms
 
-## 道德使用
+## Ethical Use
 
-**正当的：**
-- 确保关键实践被遵循
-- 创建有效的文档
-- 防止可预测的失败
+**Legitimate:**
+- Ensuring critical practices are followed
+- Creating effective documentation
+- Preventing predictable failures
 
-**不正当的：**
-- 为个人利益操纵
-- 制造虚假紧迫感
-- 基于内疚的合规
+**Illegitimate:**
+- Manipulating for personal gain
+- Creating false urgency
+- Guilt-based compliance
 
-**检验标准：** 如果用户完全理解了，这种技术是否服务于用户的真正利益？
+**The test:** Would this technique serve the user's genuine interests if they fully understood it?
 
-## 研究引用
+## Research Citations
 
-**Cialdini, R. B. (2021).** *影响力：说服的心理学（新版与扩展版）。* Harper Business.
-- 七种说服原则
-- 影响力研究的经验基础
+**Cialdini, R. B. (2021).** *Influence: The Psychology of Persuasion (New and Expanded).* Harper Business.
+- Seven principles of persuasion
+- Empirical foundation for influence research
 
 **Meincke, L., Shapiro, D., Duckworth, A. L., Mollick, E., Mollick, L., & Cialdini, R. (2025).** Call Me A Jerk: Persuading AI to Comply with Objectionable Requests. University of Pennsylvania.
-- 用 N=28,000 次 LLM 对话测试了 7 种原则
-- 使用说服技巧后合规率从 33% 增加到 72%
-- 权威、承诺、稀缺性最有效
-- 验证了 LLM 行为的类人模型
+- Tested 7 principles with N=28,000 LLM conversations
+- Compliance increased 33% → 72% with persuasion techniques
+- Authority, commitment, scarcity most effective
+- Validates parahuman model of LLM behavior
 
-## 快速参考
+## Quick Reference
 
-在设计技能时，问自己：
+When designing a skill, ask:
 
-1. **它是什么类型？**（纪律 vs. 指导 vs. 参考）
-2. **我想改变什么行为？**
-3. **哪些原则适用？**（纪律通常用权威 + 承诺）
-4. **我是否组合了太多？**（不要全部七种都用）
-5. **这是道德的吗？**（服务于用户的真正利益？）
+1. **What type is it?** (Discipline vs. guidance vs. reference)
+2. **What behavior am I trying to change?**
+3. **Which principle(s) apply?** (Usually authority + commitment for discipline)
+4. **Am I combining too many?** (Don't use all seven)
+5. **Is this ethical?** (Serves user's genuine interests?)
