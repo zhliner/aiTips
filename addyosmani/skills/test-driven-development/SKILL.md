@@ -131,7 +131,7 @@ export async function completeTask(id: string): Promise<Task> {
 
 Invest testing effort according to the pyramid — most tests should be small and fast, with progressively fewer tests at higher levels:
 
-```
+```graph
           ╱╲
          ╱  ╲         E2E Tests (~5%)
         ╱    ╲        Full user flows, real browser

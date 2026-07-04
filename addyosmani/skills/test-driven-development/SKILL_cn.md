@@ -23,13 +23,21 @@ description: 以测试驱动开发。适用于实现任何逻辑、修复任何 
 
 ## TDD 循环
 
-```
-    RED                GREEN              REFACTOR
- 编写一个失败的   编写最少的代码    重构清理
- 测试       ──→  使其通过    ──→  实现代码  ──→  （重复）
-      │                  │                    │
-      ▼                  ▼                    ▼
-   测试 FAILS        测试 PASSES         测试仍然 PASS
+```mermaid
+flowchart LR
+    RED["RED<br/>编写一个失败的测试"]
+    GREEN["GREEN<br/>编写最少的代码使其通过"]
+    REFACTOR["REFACTOR<br/>重构清理实现代码"]
+    FAILS["测试 FAILS"]
+    PASSES1["测试 PASSES"]
+    PASSES2["测试仍然 PASS"]
+
+    RED --> GREEN --> REFACTOR
+    REFACTOR --> RED
+
+    RED --> FAILS
+    GREEN --> PASSES1
+    REFACTOR --> PASSES2
 ```
 
 ### 第 1 步：RED — 编写一个失败的测试
@@ -83,23 +91,13 @@ export async function createTask(input: { title: string }): Promise<Task> {
 
 当收到 bug 报告时，**不要一开始就试图修复它。** 先编写一个复现该 bug 的测试。
 
-```
-收到 bug 报告
-        │
-        ▼
-   编写一个展示该 bug 的测试
-        │
-        ▼
-   测试 FAILS（确认 bug 存在）
-        │
-        ▼
-   实施修复
-        │
-        ▼
-   测试 PASSES（证明修复有效）
-        │
-        ▼
-   运行完整测试套件（无回归）
+```mermaid
+flowchart TD
+    A[收到 bug 报告] --> B[编写一个展示该 bug 的测试]
+    B --> C[测试 FAILS（确认 bug 存在）]
+    C --> D[实施修复]
+    D --> E[测试 PASSES（证明修复有效）]
+    E --> F[运行完整测试套件（无回归）]
 ```
 
 **示例：**
@@ -131,7 +129,7 @@ export async function completeTask(id: string): Promise<Task> {
 
 按照金字塔分配测试投入——大多数测试应该是小而快的，越往上层测试数量越少：
 
-```
+```graph
           ╱╲
          ╱  ╲         E2E 测试（约 5%）
         ╱    ╲        完整用户流程，真实浏览器
@@ -221,15 +219,15 @@ it('trims whitespace from titles', () => {
 
 使用能完成任务的最简单的测试替身。测试中使用的真实代码越多，提供的信心就越强。
 
-```
+```graph
 偏好顺序（从最偏好到最不偏好）：
-1. 真实实现  → 最高信心，能捕获真实 bug
-2. Fake      → 依赖的内存版本（如 fake DB）
-3. Stub      → 返回预设数据，无行为
-4. Mock（交互） → 验证方法调用——谨慎使用
+1. Real implementation  → 最高信心，能捕获真实 bug
+2. Fake                 → 依赖的内存版本（如 fake DB）
+3. Stub                 → 返回预设数据，无行为
+4. Mock（交互）         → 验证方法调用——谨慎使用
 ```
 
-**仅在以下情况使用 mock：** 真实实现太慢、非确定性、或有无法控制的副作用（外部 API、发送邮件）。过度 mock 会导致测试通过但生产环境崩溃。
+**仅在以下情况使用 mock：** Real implementation 太慢、非确定性、或有无法控制的副作用（外部 API、发送邮件）。过度 mock 会导致测试通过但生产环境崩溃。
 
 ### 使用 Arrange-Act-Assert 模式
 
@@ -293,7 +291,7 @@ describe('TaskService', () => {
 | 测试框架代码 | 浪费时间在测试第三方行为上 | 只测试你自己的代码 |
 | 快照滥用 | 没人审查的大型快照，任何改动都会导致失败 | 谨慎使用快照并审查每一处变更 |
 | 无测试隔离 | 单独运行通过但一起运行失败 | 每个测试自行设置和清理状态 |
-| 过度 mock | 测试通过但生产环境崩溃 | 优先使用真实实现 > fake > stub > mock。仅在真实依赖慢或非确定性的边界处使用 mock |
+| 过度 mock | 测试通过但生产环境崩溃 | 优先使用 Real implementation > fake > stub > mock。仅在真实依赖慢或非确定性的边界处使用 mock |
 
 ## 使用 DevTools 进行浏览器测试
 
