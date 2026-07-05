@@ -1,6 +1,6 @@
 ---
 name: brainstorming
-description: "你必须在任何创造性工作之前使用此 skill——创建功能、构建组件、添加功能或修改行为。在实现之前探索用户意图、需求和设计。"
+description: "在用户提出实现某个完整功能、目标或概念时，使用此 skill——创建功能、构建组件、添加功能或修改行为。在实现之前探索用户意图、需求和设计。"
 ---
 
 # 将想法转化为设计
@@ -26,7 +26,7 @@ description: "你必须在任何创造性工作之前使用此 skill——创建
 3. **提出澄清问题** — 逐一提问，理解目的/约束/成功标准
 4. **提出 2-3 种方案** — 附带权衡和你的推荐
 5. **展示设计** — 按复杂度分段展示，每段后获取用户批准
-6. **编写设计文档** — 保存到 `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` 并 commit
+6. **编写设计文档** — 保存到 `docs/specs/YYYY-MM-DD-<topic>-design.md` 并 commit
 7. **Spec 自审** — 快速内联检查占位符、矛盾、歧义、范围（见下方）
 8. **用户 review 书面 spec** — 在继续之前请用户 review spec 文件
 9. **过渡到实现** — 调用 writing-plans skill 创建实现 plan
@@ -47,7 +47,7 @@ flowchart TD
     H -->|"批准"| I(("调用 writing-plans skill"))
 ```
 
-**终止状态是调用 writing-plans。** 不要调用 frontend-design、mcp-builder 或任何其他实现 skill。brainstorming 之后唯一调用的 skill 是 writing-plans。
+**终止状态是调用 writing-plans。** 不要调用任何其他实现 skill，brainstorming 之后唯一调用的 skill 是 writing-plans。
 
 ## 流程
 
@@ -92,7 +92,7 @@ flowchart TD
 
 **文档：**
 
-- 将验证过的设计（spec）写入 `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
+- 将验证过的设计（spec）写入 `docs/specs/YYYY-MM-DD-<topic>-design.md`
   - （用户对 spec 位置的偏好会覆盖此默认值）
 - 如果可用，使用 elements-of-style:writing-clearly-and-concisely skill
 - 将设计文档 commit 到 git

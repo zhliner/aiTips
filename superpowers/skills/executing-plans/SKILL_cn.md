@@ -11,7 +11,7 @@ description: 当你有书面实施计划需要在单独的会话中执行并设�
 
 **开始时宣布：** "I'm using the executing-plans skill to implement this plan."
 
-**注意：** 告诉你的用户搭档，Superpowers 在可以使用 subagent 的情况下效果更好。如果在支持 subagent 的平台上运行，其工作质量将显著提高（Claude Code、Codex CLI、Codex App 和 Copilot CLI 都符合条件；参见 `../using-superpowers/references/` 中的各平台工具参考）。如果 subagent 可用，请使用 superpowers:subagent-driven-development 而非此 skill。
+**注意：** 如果 subagent 可用，请使用 subagent-driven-development 而非此 skill。
 
 ## 流程
 
@@ -33,7 +33,7 @@ description: 当你有书面实施计划需要在单独的会话中执行并设�
 
 所有任务完成并验证后：
 - 宣布："I'm using the finishing-a-development-branch skill to complete this work."
-- **必需子 skill：** 使用 superpowers:finishing-a-development-branch
+- **必需子 skill：** 使用 finishing-a-development-branch
 - 按照该 skill 验证测试、展示选项、执行选择
 
 ## 何时停下来寻求帮助
@@ -65,6 +65,6 @@ description: 当你有书面实施计划需要在单独的会话中执行并设�
 ## 集成
 
 **必需的工作流 skills：**
-- **superpowers:using-git-worktrees**——确保隔离的工作区（创建一个或验证已有的）
-- **superpowers:writing-plans**——创建此 skill 执行的计划
-- **superpowers:finishing-a-development-branch**——所有任务完成后完成开发
+- **using-git-worktrees**——确保隔离的工作区（创建一个或验证已有的）
+- **writing-plans**——创建此 skill 执行的计划
+- **finishing-a-development-branch**——所有任务完成后完成开发

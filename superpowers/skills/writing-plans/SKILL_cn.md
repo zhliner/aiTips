@@ -13,9 +13,9 @@ description: 当你有 spec 或多步骤任务的需求时，在编写代码之�
 
 **开始时宣布：** "I'm using the writing-plans skill to create the implementation plan."
 
-**上下文：** 如果在隔离的 worktree 中工作，它应该是在执行时通过 `superpowers:using-git-worktrees` skill 创建的。
+**上下文：** 如果在隔离的 worktree 中工作，它应该是在执行时通过 `using-git-worktrees` skill 创建的。
 
-**Plan 保存位置：** `docs/superpowers/plans/YYYY-MM-DD-<feature-name>.md`
+**Plan 保存位置：** `docs/plans/YYYY-MM-DD-<feature-name>.md`
 - （用户对 plan 位置的偏好会覆盖此默认值）
 
 ## 范围检查
@@ -53,7 +53,7 @@ description: 当你有 spec 或多步骤任务的需求时，在编写代码之�
 ```markdown
 # [Feature Name] 实现 Plan
 
-> **给 agentic workers：** 必需子技能：使用 superpowers:subagent-driven-development（推荐）或 superpowers:executing-plans 逐任务实现此 plan。步骤使用复选框（`- [ ]`）语法进行跟踪。
+> **给 agentic workers：** 必需子技能：使用 subagent-driven-development（推荐）或 executing-plans 逐任务实现此 plan。步骤使用复选框（`- [ ]`）语法进行跟踪。
 
 **Goal:** [一句话描述构建什么]
 
@@ -147,7 +147,7 @@ git commit -m "feat: add specific feature"
 
 保存 plan 后，提供执行选择：
 
-**"Plan 已完成并保存到 `docs/superpowers/plans/<filename>.md`。两种执行选项：**
+**"Plan 已完成并保存到 `docs/plans/<filename>.md`。两种执行选项：**
 
 **1. Subagent-Driven（推荐）** - 我为每个任务派遣新的 subagent，任务间 review，快速迭代
 
@@ -156,9 +156,9 @@ git commit -m "feat: add specific feature"
 **选择哪种方式？"**
 
 **如果选择 Subagent-Driven：**
-- **REQUIRED SUB-SKILL：** 使用 superpowers:subagent-driven-development
+- **REQUIRED SUB-SKILL：** 使用 subagent-driven-development
 - 每个任务一个新 subagent + 两阶段 review
 
 **如果选择 Inline Execution：**
-- **REQUIRED SUB-SKILL：** 使用 superpowers:executing-plans
+- **REQUIRED SUB-SKILL：** 使用 executing-plans
 - 批量执行并设置检查点供 review

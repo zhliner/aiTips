@@ -59,7 +59,7 @@ flowchart TB
     R["阅读计划，记录上下文和全局约束，创建 todos"]
     S{"还有更多任务？"}
     T["分派最终代码审查者 subagent（../requesting-code-review/code-reviewer.md）"]
-    U["使用 superpowers:finishing-a-development-branch"]
+    U["使用 finishing-a-development-branch"]
 
     R --> A
     A --> B
@@ -254,14 +254,14 @@ subagent 采取的轮次而缩放，最便宜的 model 在多步骤工作上通�
 
 - [implementer-prompt.md](implementer-prompt.md) - 分派实现者 subagent
 - [task-reviewer-prompt.md](task-reviewer-prompt.md) - 分派任务审查者 subagent（spec 符合性 + 代码质量）
-- 最终的整个 branch 审查：使用 superpowers:requesting-code-review 的 [code-reviewer.md](../requesting-code-review/code-reviewer.md)
+- 最终的整个 branch 审查：使用 requesting-code-review 的 [code-reviewer.md](../requesting-code-review/code-reviewer.md)
 
 ## 工作流示例
 
 ```
 你：我正在使用 Subagent-Driven Development 来执行此计划。
 
-[阅读一次计划文件：docs/superpowers/plans/feature-plan.md]
+[阅读一次计划文件：docs/plans/feature-plan.md]
 [为所有任务创建 todos]
 
 任务 1：Hook 安装脚本
@@ -392,13 +392,13 @@ subagent 采取的轮次而缩放，最便宜的 model 在多步骤工作上通�
 ## 集成
 
 **必需的工作流 skill：**
-- **superpowers:using-git-worktrees** - 确保隔离的工作区（创建一个或验证现有的）
-- **superpowers:writing-plans** - 创建此 skill 执行的计划
-- **superpowers:requesting-code-review** - 最终整个 branch 审查的代码审查模板
-- **superpowers:finishing-a-development-branch** - 所有任务完成后完成开发
+- **using-git-worktrees** - 确保隔离的工作区（创建一个或验证现有的）
+- **writing-plans** - 创建此 skill 执行的计划
+- **requesting-code-review** - 最终整个 branch 审查的代码审查模板
+- **finishing-a-development-branch** - 所有任务完成后完成开发
 
 **Subagent 应使用：**
-- **superpowers:test-driven-development** - Subagent 为每个任务遵循 TDD
+- **test-driven-development** - Subagent 为每个任务遵循 TDD
 
 **替代工作流：**
-- **superpowers:executing-plans** - 用于并行会话而不是同会话执行
+- **executing-plans** - 用于并行会话而不是同会话执行

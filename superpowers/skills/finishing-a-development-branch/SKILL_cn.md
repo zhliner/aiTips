@@ -170,7 +170,7 @@ WORKTREE_PATH=$(git rev-parse --show-toplevel)
 
 **如果 `GIT_DIR == GIT_COMMON`：** 普通 repository，无需清理 worktree。完成。
 
-**如果 worktree 路径在 `.worktrees/` 或 `worktrees/` 下：** Superpowers 创建了这个 worktree——我们负责清理。
+**如果 worktree 路径在 `.worktrees/` 或 `worktrees/` 下：** Agent 创建了这个 worktree——我们负责清理。
 
 ```bash
 MAIN_ROOT=$(git -C "$(git rev-parse --git-common-dir)/.." rev-parse --show-toplevel)
