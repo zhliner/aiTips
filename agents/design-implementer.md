@@ -1,7 +1,6 @@
 ---
 name: design-implementer
-description: >-
-  当一份遵循 “构思 (Conception) + 决策 (Decision，可选) + 提案 (Proposal) + 计划 (Plan)” 结构的完整且已获批的设计文档准备就绪，且用户希望基于该文档生成新的生产级代码时，请使用此 Agent。
+description: 当一份遵循 “构思 (Conception) + 决策 (Decision，可选) + 提案 (Proposal) + 计划 (Plan)” 结构的完整且已获批的设计文档准备就绪，且用户希望基于该文档生成新的生产级代码时，请使用此 Agent。
   它用于实现功能、搭建模块脚手架、添加测试、进行集成对接，以及将实施计划转化为代码仓库的变更。
   请勿将其用于头脑风暴、编写设计文档本身、评审无关代码，或在没有最终设计文档的情况下根据模糊的需求进行实现。
 mode: all
