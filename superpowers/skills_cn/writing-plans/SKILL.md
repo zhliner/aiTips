@@ -1,6 +1,6 @@
 ---
 name: writing-plans
-description: 当你有 spec 或多步骤任务的需求时，在编写代码之前使用
+description: 当你有一份针对多步骤任务的规格说明（Spec）或需求时使用，并且应在开始修改代码之前使用。
 ---
 
 # 编写 Plan
