@@ -1,6 +1,6 @@
 ---
 name: doubt-driven-development
-description: Subjects every non-trivial decision to a fresh-context adversarial review before it stands. Use when correctness matters more than speed, when working in unfamiliar code, when stakes are high (production, security-sensitive logic, irreversible operations), or any time a confident output would be cheaper to verify now than to debug later.
+description: 对每一个非平凡的决策在全新上下文中进行对抗性审查，然后才予通过。当正确性比速度更重要时，当在不熟悉的代码中工作时，当风险较高时（生产环境、安全敏感逻辑、不可逆操作），或者当现在验证比事后调试更便宜时，使用此技能。
 ---
 
 # Doubt-Driven Development

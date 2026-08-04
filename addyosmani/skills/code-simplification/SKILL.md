@@ -1,6 +1,6 @@
 ---
 name: code-simplification
-description: Simplifies code for clarity. Use when refactoring code for clarity without changing behavior. Use when code works but is harder to read, maintain, or extend than it should be. Use when reviewing code that has accumulated unnecessary complexity.
+description: 简化代码以提升清晰度。适用于在不改变行为的前提下，重构代码以提高可读性。适用于代码能正常运行，但可读性、可维护性或可扩展性不如预期的场景。在审查积累了不必要复杂性的代码时使用。
 ---
 
 # Code Simplification

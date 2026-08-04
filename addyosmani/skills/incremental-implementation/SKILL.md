@@ -1,6 +1,6 @@
 ---
 name: incremental-implementation
-description: Delivers changes incrementally. Use when implementing any feature or change that touches more than one file. Use when you're about to write a large amount of code at once, or when a task feels too big to land in one step.
+description: 增量交付变更。当实现任何涉及多个文件的功能或变更时使用。当你即将一次性编写大量代码，或任务太大无法一步完成时使用。
 ---
 
 # Incremental Implementation

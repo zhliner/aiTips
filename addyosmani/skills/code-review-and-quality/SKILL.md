@@ -1,6 +1,6 @@
 ---
 name: code-review-and-quality
-description: Conducts multi-axis code review. Use before merging any change. Use when reviewing code written by yourself, another agent, or a human. Use when you need to assess code quality across multiple dimensions before it enters the main branch.
+description: 进行多维度代码审查。在合并任何变更之前使用。当你需要审查自己、其他 agent 或人类编写的代码时使用。当需要在代码进入主分支之前，从多个维度评估代码质量时使用。
 ---
 
 # Code Review and Quality

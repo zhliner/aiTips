@@ -1,6 +1,6 @@
 ---
 name: planning-and-task-breakdown
-description: Breaks work into ordered tasks. Use when you have a spec or clear requirements and need to break work into implementable tasks. Use when a task feels too large to start, when you need to estimate scope, or when parallel work is possible.
+description: 将工作分解为有序任务。当你有规格说明或明确需求，需要将工作拆分为可实施的任务时使用。当任务感觉太大无法着手、需要评估范围，或可以并行工作时使用。
 ---
 
 # Planning and Task Breakdown

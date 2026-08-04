@@ -1,6 +1,6 @@
 ---
 name: shipping-and-launch
-description: Prepares production launches. Use when preparing to deploy to production. Use when you need a pre-launch checklist, when setting up monitoring, when planning a staged rollout, or when you need a rollback strategy.
+description: 为生产环境发布做准备。在准备部署到生产环境时使用。当需要在发布前检查清单、设置监控、规划分阶段发布或制定回滚策略时使用。
 ---
 
 # Shipping and Launch
