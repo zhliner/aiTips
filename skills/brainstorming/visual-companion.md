@@ -39,17 +39,17 @@ scripts/start-server.sh --project-dir /path/to/project --open
 
 # 返回：{"type":"server-started","port":52341,
 #         "url":"http://localhost:52341/?key=ab12…",
-#         "screen_dir":"/path/to/project/.superpowers/brainstorm/12345-1706000000/content",
-#         "state_dir":"/path/to/project/.superpowers/brainstorm/12345-1706000000/state"}
+#         "screen_dir":"/path/to/project/.brainstorm/12345-1706000000/content",
+#         "state_dir":"/path/to/project/.brainstorm/12345-1706000000/state"}
 ```
 
 从响应中保存 `screen_dir` 和 `state_dir`。使用 `--open` 时，浏览器在你推送第一个画面时自动打开——你不需要请用户打开它，但仍分享 URL 作为备选（headless/远程设置不会自动打开）。
 
 **URL 包含 session key（`?key=…`）。** 服务器拒绝任何没有它的请求，所以始终给用户提供 `url` 字段中的**完整** URL——永远不要去掉查询字符串，也永远不要给出裸的 `http://host:port`。此 key 控制 HTTP 和 WebSocket 访问，防止 stray 浏览器标签或网络上的其他机器读取画面或注入事件。首次加载后浏览器通过 cookie 记住 key，因此重新加载和 `/files/*` 资源无需重复传递。
 
-**查找连接信息：** 服务器将启动 JSON 写入 `$STATE_DIR/server-info`。如果你在后台启动了服务器且未捕获 stdout，读取该文件获取 URL 和端口。使用 `--project-dir` 时，检查 `<project>/.superpowers/brainstorm/` 找到 session 目录。
+**查找连接信息：** 服务器将启动 JSON 写入 `$STATE_DIR/server-info`。如果你在后台启动了服务器且未捕获 stdout，读取该文件获取 URL 和端口。使用 `--project-dir` 时，检查 `<project>/.brainstorm/` 找到 session 目录。
 
-**注意：** 传递项目根目录作为 `--project-dir`，这样 mockup 持久化在 `.superpowers/brainstorm/` 中并在服务器重启后保留。不传递的话，文件进入 `/tmp` 并被清理。提醒用户如果 `.superpowers/` 还不在 `.gitignore` 中，应将其添加。
+**注意：** 传递项目根目录作为 `--project-dir`，这样 mockup 持久化在 `.brainstorm/` 中并在服务器重启后保留。不传递的话，文件进入 `/tmp` 并被清理。提醒用户如果 `.brainstorm/` 还不在 `.gitignore` 中，应将其添加。
 
 **各平台启动服务器方式：**
 
@@ -277,7 +277,7 @@ frame 模板为你的内容提供以下 CSS 类：
 scripts/stop-server.sh $SESSION_DIR
 ```
 
-如果 session 使用了 `--project-dir`，mockup 文件持久化在 `.superpowers/brainstorm/` 中供后续参考。只有 `/tmp` session 会在停止时被删除。
+如果 session 使用了 `--project-dir`，mockup 文件持久化在 `.brainstorm/` 中供后续参考。只有 `/tmp` session 会在停止时被删除。
 
 ## 参考
 

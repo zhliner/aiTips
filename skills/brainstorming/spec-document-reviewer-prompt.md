@@ -4,8 +4,6 @@
 
 **目的：** 验证 spec 是否完整、一致，以及是否可以开始实现规划。
 
-**派遣时机：** Spec 文档写入 docs/superpowers/specs/ 之后。
-
 ```
 Subagent (general-purpose):
   description: "Review spec document"

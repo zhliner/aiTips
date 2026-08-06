@@ -1,6 +1,6 @@
 ---
 name: test-driven-development
-description: 在实现任何功能或修复 bug 时使用，在编写实现代码之前
+description: 在实现任何功能或修复 bug 时使用，在编写实现代码之前。
 ---
 
 # 测试驱动开发（TDD）
